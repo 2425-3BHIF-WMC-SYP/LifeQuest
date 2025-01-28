@@ -2,35 +2,33 @@
 
 ## Inhaltsverzeichnis
 
-- [1. Ausgangslage](#1-ausgangslage)
-  - [1.1. Ist-Situation](#11-ist-situation)
-  - [1.2. Verbesserungspotenziale](#12-verbesserungspotenziale)
-- [2. Zielsetzung](#2-zielsetzung)
-- [3. Funktionale Anforderungen](#3-funktionale-anforderungen)
-  - [3.1. Use Case Überblick](#31-use-case-überblick)
-  - [3.2. Landingpage](#32-landingpage)
-    - [3.2.1. GUI-Design](#321-gui-design)
-    - [3.2.2. Workflow](#322-workflow)
-  - [3.3. AI](#33-ai)
-    - [3.3.1. Todos Einführung](#331-todos-einführung)
-    - [3.3.2. Quests Einführung](#332-quests-einführung)
-    - [3.3.3. Notification Center Einführung](#333-notification-center-einführung)
-  - [3.4. Profile](#34-profile)
-    - [3.4.1. Reset Password](#341-reset-password)
-    - [3.4.2. Change Email and Delete Account](#342-change-email-and-delete-account)
-  - [3.5. Todos](#35-todos)
-  - [3.6. Stats](#36-stats)
-  - [3.7. Kalender](#37-kalender)
-- [4. Nicht-funktionale Anforderungen](#4-nicht-funktionale-anforderungen)
-  - [`Usability`: Benutzbarkeitsanforderung](#usability-benutzbarkeitsanforderung)
-  - [`Efficiency`: Effizienzanforderung](#efficiency-effizienzanforderung)
-  - [`Maintenance`: Wartbarkeits- und Portierbarkeitsanforderung](#maintenance-wartbarkeits-und-portierbarkeitsanforderung)
-  - [`Security`: Sicherheitsanforderung](#security-sicherheitsanforderung)
-  - [`Legal`: Gesetzliche Anforderung](#legal-gesetzliche-anforderung)
-- [5. Mengengerüst](#5-mengengerüst)
-- [6. Systemarchitektur](#6-systemarchitektur)
-  - [6.1. Deployment-Diagramm](#61-deployment-diagramm)
-  - [6.2. Datenmodell](#62-datenmodell)
+- [**Pflichtenheft: `LifeQuest`**](#pflichtenheft-lifequest)
+  - [Inhaltsverzeichnis](#inhaltsverzeichnis)
+- [**1. Ausgangslage**](#1-ausgangslage)
+  - [**1.1 Ist-Situation**](#11-ist-situation)
+  - [**1.2 Verbesserungspotenziale**](#12-verbesserungspotenziale)
+- [**2. Zielsetzung**](#2-zielsetzung)
+    - [**Feature-Set:**](#feature-set)
+- [**3. Funktionale Anforderungen**](#3-funktionale-anforderungen)
+  - [**3.1 Use Case Überblick**](#31-use-case-überblick)
+  - [**3.2 Landingpage**](#32-landingpage)
+  - [**3.3 AI**](#33-ai)
+  - [**3.4 Profile**](#34-profile)
+    - [**3.4.2 Change Email and Delete Account**](#342-change-email-and-delete-account)
+    - [**3.4.1 Reset Password**](#341-reset-password)
+  - [**3.5 Todos**](#35-todos)
+  - [**3.6 Stats**](#36-stats)
+  - [**3.7 Kalender**](#37-kalender)
+  - [4. Nicht-funktionale Anforderungen](#4-nicht-funktionale-anforderungen)
+    - [`Usability`: Benutzbarkeitsanforderung](#usability-benutzbarkeitsanforderung)
+    - [`Efficiency`: Effizienzanforderung](#efficiency-effizienzanforderung)
+    - [`Maintenance`: Wartbarkeits- und Portierbarkeitsanforderung](#maintenance-wartbarkeits--und-portierbarkeitsanforderung)
+    - [`Security`: Sicherheitsanforderung](#security-sicherheitsanforderung)
+    - [`Legal`: Gesetzliche Anforderung](#legal-gesetzliche-anforderung)
+  - [5. Mengengerüst](#5-mengengerüst)
+  - [6. Systemarchitektur](#6-systemarchitektur)
+    - [6.1 Deployment-Diagramm](#61-deployment-diagramm)
+    - [6.2 Datenmodell](#62-datenmodell)
 
 # **1. Ausgangslage**
 
@@ -69,7 +67,7 @@ We aim to develop a personalized "self-improvement" app that combines features o
 # **3. Funktionale Anforderungen**
 
 ## **3.1 Use Case Überblick**
-![image](./images/usecasediagram.png)
+![image](./images/Usecase_Lifequest.png)
 
 ## **3.2 Landingpage**
 Both public and private users will have access to the calendar landing page. They will be welcomed by our AI. Below the welcoming page, there are some showcases of the features available to users.
