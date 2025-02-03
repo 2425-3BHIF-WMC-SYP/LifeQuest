@@ -12,13 +12,10 @@
 - [**3. Funktionale Anforderungen**](#3-funktionale-anforderungen)
   - [**3.1 Use Case Überblick**](#31-use-case-überblick)
   - [**3.2 Landingpage**](#32-landingpage)
-  - [**3.3 AI**](#33-ai)
-  - [**3.4 Profile**](#34-profile)
-    - [**3.4.2 Change Email and Delete Account**](#342-change-email-and-delete-account)
-    - [**3.4.1 Reset Password**](#341-reset-password)
-  - [**3.5 Todos**](#35-todos)
-  - [**3.6 Stats**](#36-stats)
-  - [**3.7 Kalender**](#37-kalender)
+  - [**3.3 Edit/View Todos**](#33-Todos)
+  - [**3.4 View Stats**](#34-Stats)
+  - [**3.5 add/remove entries in Calender**](#35-Calandar)
+  - [**3.6 change view in Calander**](#36-Calandar)
   - [4. Nicht-funktionale Anforderungen](#4-nicht-funktionale-anforderungen)
     - [`Usability`: Benutzbarkeitsanforderung](#usability-benutzbarkeitsanforderung)
     - [`Efficiency`: Effizienzanforderung](#efficiency-effizienzanforderung)
@@ -43,22 +40,13 @@ We aim to develop a personalized "self-improvement" app that combines features o
 
 ### **Feature-Set:**
 - **Calendar:**
-  - Week View
-  - Visualize tasks and dates
+  - change View
+  - visualize entries
+  - add/remove entries
 - **ToDo List:**
-  - Visualize ToDos
-- **Virtual Assistant:**
-  - Introduction to the website
-  - Interactive
-  - Personalized advice
-  - Define weekly goals:
-    - Title
-    - Duration
-    - Frequency
-    - Time
-  - Propose time slots per week:
-    - Accept or modify
-  - Notifications
+  - visualize ToDos
+  - add/remove ToDos
+  - set Todo Status
 - **Level System:**
   - Gain experience points (XP) to level up
   - Lose XP to lose levels
@@ -70,60 +58,25 @@ We aim to develop a personalized "self-improvement" app that combines features o
 ![image](./images/Usecase_Lifequest.png)
 
 ## **3.2 Landingpage**
-Both public and private users will have access to the calendar landing page. They will be welcomed by our AI. Below the welcoming page, there are some showcases of the features available to users.
+A new user has no access to the features. If a new user decides to click on one of the features he will be asked to Sign up  
 
 ![image](./images/landingpage.png)
 
-By clicking on the arrows, additional features will be shown.
 
-![alt text](image.png)
+![alt text](./images/login.png)
 
-By clicking on any icon, the user will be prompted to sign up or log in.
+![alt text](./images/sign-up.png)
 
-## **3.3 AI**
-If the user is new and decides to create an account, they will be introduced by our AI. After clicking the "Start" button, the user will be forwarded to the main page with an explanation. However, if the user is not interested in the introduction, they can skip it.
+## **3.3 Edit/View Todos**
 
-![image](./images/introduction.png)
+The user can set change the status of his Todo's and delete them. 
 
-![alt text](./images/homepage-intro.png)
+<img src="images/todos.png">
 
-**Todos Introduction:**
-![alt text](./images/todos-intro.png)
+<img src="images/add-todo.png">
 
-**Quests Introduction:**
-![alt text](./images/quests-intro.png)
 
-**Notification Center:**
-![alt text](./images/notif-intro.png)
-
-## **3.4 Profile**
-In the profile tab, users can get an overview of their progress and activity.
-
-![alt text](./images/profile.png)
-
-When the user clicks on "Settings," they will be forwarded to the settings page where they can:
-- Reset password
-- Change email
-- Delete account
-
-![alt text](./images/settings.png)
-
-### **3.4.2 Change Email and Delete Account**
-To change the email, the user must enter the new email and a verification code sent to their email. When clicking the delete button, the user will be asked for confirmation before deleting their account.
-
-![alt text](./images/delete-account.png)
-
-### **3.4.1 Reset Password**
-If the user forgets their password, they can click on "Reset." An email with a verification code will be sent. The user will need to enter the code and their new password.
-
-![alt text](./images/reset-pwd.png)
-
-## **3.5 Todos**
-For better task management, the user can navigate to the ToDo page. In the "Deadlines" section, tasks with the nearest deadlines will be displayed. Additionally, there is an overview of completed, pending, and overdue tasks.
-
-![alt text](./images/todos.png)
-
-## **3.6 Stats**
+## **3.4 View Stats**
 Each user has a personalized stats page, where they can track their achievements since joining our community, with a leaderboard to motivate them to climb to the top.
 
 ![alt text](./images/stats-page.png)
@@ -132,45 +85,45 @@ To get more details from graphs, the user can hover over any point.
 
 ![alt text](./images/exp-details.png)
 
-## **3.7 Kalender**
+## **3.5 add/remove entries in Calender**
 A simple calendar allows users to add events by clicking on the desired date and time. Alternatively, users can click on the "Add" button and fill in the necessary information.
 
-![alt text](./images/calandar-daily.png)
+![alt text](./images/add-entry.png)
 
-![alt text](./images/add-event.png)
+![alt text](./images/addbutton-calandar.png)
 
 For users to change the view, they need to click on "Weekly" and select their preferences.
 
+## **3.6 change view in Calander**
+
+The Standard view is the weekly View to change. The user can easily change from weekly to daily.
+Weekly View: 
+
+![alt text](./images/weekly-view.png)
+
+Daily View : 
+
+![alt text](./images/daily-view.png)
+
 ## 4. Nicht-funktionale Anforderungen
-
-Nicht-funktionale Anforderungen beschreiben Anforderungen an das System, die nicht-fachlicher Natur sind, jedoch entscheidend zur Anwendbarkeit des Systems beitragen. Sie definieren beispielsweise Qualitätsanforderungen, Sicherheitsanforderungen oder Performanceanforderungen.
-
-Nicht-funktionale Anforderungen definieren grundlegende Eigenschaften eines Systems, die im Architekturentwurf berücksichtigt werden müssen. Da diese Anforderungen auch die Entwicklungskosten beeinflussen (können), müssen sie messbar beschrieben werden.
-
-- FALSCH: Das System muss schnell sein.
-- RICHTIG: Daten müssen spätestens innerhalb von 500 ms zurückgegeben werden.
-
-Zur einfachen Strukturierung der Anforderungen werden diejenigen Anforderungen, die nicht eindeutig zu den funktionalen Anforderungen gehören, den nicht-funktionalen Anforderungen zugeordnet.
-
-Hier ein Überblick über mögliche nicht-funktionale Anforderungen:
 
 ### `Usability`: Benutzbarkeitsanforderung
 
 - Wie muss die Software beschaffen sein, damit die Zielgruppe gerne damit arbeitet?
-- Beispiel:
-  - Die Software soll dem Erscheinungsbild anderer Produkte des Herstellers entsprechen.
+
+- Key feutures should be easily accessible
+- Fast load times and smooth Transitions
+- Giving Users the freedom to change the design
 
 ### `Efficiency`: Effizienzanforderung
-
-- Hier geht es sowohl um Laufzeit- als auch um Speichereffizienz. Was wird unter dem sparsamen Einsatz dieser Ressourcen verstanden?
-- Beispiel:
-  - Die Berechnung darf nicht länger als 0,25 Sekunden dauern.
+- To ensure a smooth expirience, the application should respond within 0.2-0.5 seconds
+- As we want to have as many users as possible,we will try to minimize memory usage
 
 ### `Maintenance`: Wartbarkeits- und Portierbarkeitsanforderung
 
 - Welcher Grad an Änderbarkeit wird gefordert? Hier werden, soweit wie möglich, kommende Anpassungen und Erweiterungen vorhergesehen.
-- Beispiel:
-  - Das Produkt soll später auch in englischer Sprache verfügbar sein.
+
+- The applications should have a better rewarding system and a Virtuell Assistent to support the users development. Above that the application will have the feature, to let the user make an own Calandar View
 
 ### `Security`: Sicherheitsanforderung
 
@@ -181,11 +134,11 @@ Hier ein Überblick über mögliche nicht-funktionale Anforderungen:
 - Beispiel:
   - Das System muss gewährleisten, dass Daten nie verändert werden können.
 
+- The software will never change the users data, and the data will be encrypted.System shutdown are allowed as long as it doesn't happen too often and not for too long
+
 ### `Legal`: Gesetzliche Anforderung
 
-- Welche Standards und Gesetze müssen beachtet werden?
-- Beispiel:
-  - Das Produkt muss die ISO 9000 Norm erfüllen.
+- The is no need for it as the website won't be hosted
 
 ## 5. Mengengerüst
 
@@ -194,21 +147,21 @@ Zur Abschätzung der aufkommenden Datenmengen und damit verbunden der notwendige
 - Wieviele User werden erwartet?
 - Wieviele Daten pro User werden erwartet?
 - Mit welcher Anfrage-Frequenz wird gerechnet?
+- None
+
 
 ## 6. Systemarchitektur
 
 ### 6.1 Deployment-Diagramm
-- Auflistung der Softwarekomponenten in einem Verteilungsdiagramm (typisch: Client - Server - Datenbank).
-- Beispiel:
 
-<img src="./Architektur.jpg">
+
+<img src="images/DeploymentDiagramm.png">
 
 ### 6.2 Datenmodell
 
 - Wahlweise ER-Diagramm oder objekt-orientiertes Klassendiagramm
 
-
-
+<img src="images/LifeQuest_Erd.png">
 
 
 
