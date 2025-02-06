@@ -120,34 +120,11 @@ Daily View :
 - As we want to have as many users as possible,we will try to minimize memory usage
 
 ### `Maintenance`: Wartbarkeits- und Portierbarkeitsanforderung
-
-- Welcher Grad an Änderbarkeit wird gefordert? Hier werden, soweit wie möglich, kommende Anpassungen und Erweiterungen vorhergesehen.
-
-- The applications should have a better rewarding system and a Virtuell Assistent to support the users development. Above that the application will have the feature, to let the user make an own Calandar View
+ The applications should have a better rewarding system and a Virtuell Assistent to support the users development. Above that the application will have the feature, to let the user make an own Calandar View
 
 ### `Security`: Sicherheitsanforderung
 
-- Zu den Sicherheitsanforderungen gehören die Aspekte Vertraulichkeit, Datenintegrität und Verfügbarkeit.
-  - Wie sehr müssen die Daten vor dem Zugriff durch Dritte geschützt werden?
-  - Ist es entscheidend, die Korrektheit der erfassten Daten und ihre Konsistenz zu gewährleisten?
-  - Dürfen Systemausfälle vorkommen?
-- Beispiel:
-  - Das System muss gewährleisten, dass Daten nie verändert werden können.
-
-- The software will never change the users data, and the data will be encrypted.System shutdown are allowed as long as it doesn't happen too often and not for too long
-
-### `Legal`: Gesetzliche Anforderung
-
-- The is no need for it as the website won't be hosted
-
-## 5. Mengengerüst
-
-Zur Abschätzung der aufkommenden Datenmengen und damit verbunden der notwendigen Infrastruktur, um die nötige Performance zu erzielen, ist ein Mengengerüst zu erstellen. Mögliche Fragestellungen:
-
-- Wieviele User werden erwartet?
-- Wieviele Daten pro User werden erwartet?
-- Mit welcher Anfrage-Frequenz wird gerechnet?
-- None
+The software will never change the users data, and the data will be encrypted.System shutdown are allowed as long as it doesn't happen too often and not for too long
 
 
 ## 6. Systemarchitektur
