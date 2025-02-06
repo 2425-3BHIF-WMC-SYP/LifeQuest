@@ -109,8 +109,6 @@ Daily View :
 
 ### `Usability`: Benutzbarkeitsanforderung
 
-- Wie muss die Software beschaffen sein, damit die Zielgruppe gerne damit arbeitet?
-
 - Key feutures should be easily accessible
 - Fast load times and smooth Transitions
 - Giving Users the freedom to change the design
@@ -135,8 +133,6 @@ The software will never change the users data, and the data will be encrypted.Sy
 <img src="images/DeploymentDiagramm.png">
 
 ### 6.2 Datenmodell
-
-- Wahlweise ER-Diagramm oder objekt-orientiertes Klassendiagramm
 
 <img src="images/LifeQuest_Erd.png">
 
