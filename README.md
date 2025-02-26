@@ -12,17 +12,16 @@
 - [**3. Funktionale Anforderungen**](#3-funktionale-anforderungen)
   - [**3.1 Use Case Überblick**](#31-use-case-überblick)
   - [**3.2 Landingpage**](#32-landingpage)
-  - [**3.3 Edit/View Todos**](#33-Todos)
-  - [**3.4 View Stats**](#34-Stats)
-  - [**3.5 add/remove entries in Calender**](#35-Calandar)
-  - [**3.6 change view in Calander**](#36-Calandar)
+  - [**3.3 Edit/View Todos**](#33-editview-todos)
+  - [**3.4 View Stats**](#34-view-stats)
+  - [**3.5 add/remove entries in Calender**](#35-addremove-entries-in-calender)
+  - [**3.6 change view in Calander**](#36-change-view-in-calander)
+  - [3.7](#37)
   - [4. Nicht-funktionale Anforderungen](#4-nicht-funktionale-anforderungen)
     - [`Usability`: Benutzbarkeitsanforderung](#usability-benutzbarkeitsanforderung)
     - [`Efficiency`: Effizienzanforderung](#efficiency-effizienzanforderung)
     - [`Maintenance`: Wartbarkeits- und Portierbarkeitsanforderung](#maintenance-wartbarkeits--und-portierbarkeitsanforderung)
     - [`Security`: Sicherheitsanforderung](#security-sicherheitsanforderung)
-    - [`Legal`: Gesetzliche Anforderung](#legal-gesetzliche-anforderung)
-  - [5. Mengengerüst](#5-mengengerüst)
   - [6. Systemarchitektur](#6-systemarchitektur)
     - [6.1 Deployment-Diagramm](#61-deployment-diagramm)
     - [6.2 Datenmodell](#62-datenmodell)
@@ -75,7 +74,11 @@ The user can set change the status of his Todo's and delete them.
 
 <img src="images/add-todo.png">
 
+## **3.3 gain/lose levels**
 
+![image](./images/overview.png)
+
+By marking Quests as done, the user gains experience points (XP). But the Quests will be marked as failed if user doesn't complete them in 24 hours.
 ## **3.4 View Stats**
 Each user has a personalized stats page, where they can track their achievements since joining our community, with a leaderboard to motivate them to climb to the top.
 
@@ -104,6 +107,8 @@ Weekly View:
 Daily View : 
 
 ![alt text](./images/daily-view.png)
+
+## 3.7 
 
 ## 4. Nicht-funktionale Anforderungen
 
