@@ -1,0 +1,119 @@
+/* General styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #06101F;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.signup-container {
+    background-color: #0359A3;
+    padding: 40px;
+    border-radius: 8px;
+    width: 360px;
+    box-shadow: 0px 0px 3px 3px #0359A3;
+    left: 28vw;
+    position: relative;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+label {
+    color: white;
+    font-size: 14px;
+}
+
+input, select {
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    width: 180px;
+}
+
+.small-input {
+    width: 50px;
+}
+
+.select-input {
+    width: 180px;
+    background-color: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23464646' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+}
+
+/* Profile picture upload */
+.profile-upload {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Login link */
+.login-link {
+    text-align: right;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.login-link span {
+    color: #9b9b9b;
+}
+
+.login-link a {
+    color: #9f64f2;
+    text-decoration: none;
+}
+
+.create-account {
+    background-color: #9f64f2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.create-account:hover {
+    background-color: #8a52d8;
+}
+
+.decoration{
+    position: relative;
+    height: 55vh;
+    left: 15vw;
+}
