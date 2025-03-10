@@ -1,0 +1,86 @@
+html {
+  padding: 0;
+}
+
+body {
+  background: rgb(148, 88, 192);
+  background: -moz-linear-gradient(69deg, rgba(148, 88, 192, 1) 33%, rgba(2, 99, 178, 1) 63%, rgba(9, 26, 70, 1) 100%);
+  background: -webkit-linear-gradient(69deg, rgba(148, 88, 192, 1) 33%, rgba(2, 99, 178, 1) 63%, rgba(9, 26, 70, 1) 100%);
+  background: linear-gradient(69deg, rgba(148, 88, 192, 1) 33%, rgba(2, 99, 178, 1) 63%, rgba(9, 26, 70, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#9458c0", endColorstr="#091a46", GradientType=1);
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0 !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  position: absolute;
+  left: 34vw;
+  top: 40vh;
+}
+
+.slogan h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.slogan p {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 350px;
+}
+
+button {
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  width: 150px;
+}
+
+.login-btn {
+  background: rgba(144, 19, 254, 1);
+  color: white;
+}
+
+.signup-btn {
+  background: rgba(148, 88, 192, 0.8);
+  color: white;
+}
+
+.button:hover {
+  opacity: 0.8;
+}
+
+.demo-girl {
+  position: absolute;
+  top: 16vh;
+  left: 12vw;
+  rotate: -30deg;
+  width: 250px;
+}
+
+.demo-boy {
+  position: absolute;
+  left: 78vw;
+  top: 20vh;
+  rotate: 38deg;
+  width: 250px;
+}
