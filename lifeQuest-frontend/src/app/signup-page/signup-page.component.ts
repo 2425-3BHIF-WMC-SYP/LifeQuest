@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {ThemeService} from './themeService';
+import {UtilsService} from '../shared/utils.service';
 
 @Component({
   selector: 'app-signup-page',
@@ -10,45 +12,93 @@ import {HttpClient} from '@angular/common/http';
     FormsModule
   ],
   templateUrl: './signup-page.component.html',
-  styleUrl: './signup-page.component.css'
+  styleUrls: ['./signup-page.component.css']
 })
-export class SignupPageComponent {
-  isLoading=false;
-  formData ={
-    username:'',
-    password:'',
-    email:'',
-    age:null,
-    sex:'',
-    picture:''
+export class SignupPageComponent implements OnInit {
+  currentTheme = localStorage.getItem('data-theme') || 'light';
+  previewUrl = '';
+
+  isLoading = false;
+  formData = {
+    username: '',
+    password: '',
+    email: '',
+    age: null,
+    sex: '',
+    picture: null as File | null,
   }
-  constructor(private http:HttpClient,private router:Router) {
+
+  constructor(private http: HttpClient,
+              private router: Router,
+              private themeService: ThemeService,
+              private utilsService: UtilsService,
+  ) {
   }
+
+  ngOnInit() {
+    this.themeService.initializeTheme();
+    this.themeService.theme.subscribe(theme => {
+      this.currentTheme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      console.log(`Theme set to: ${theme}`);
+    });
+  }
+
+
+  toggleTheme(theme: string) {
+    console.log(`Toggling theme to: ${theme}`);
+    this.themeService.setTheme(theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files[0]) {
+      this.formData.picture = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
   onSignupSubmit() {
     if (this.isLoading) return;
     this.isLoading = true;
 
-    const formData = new FormData();
-    formData.append('username', this.formData.username);
-    formData.append('email', this.formData.email);
-    formData.append('password', this.formData.password);
-    formData.append('age', this.formData.age || '');
-    formData.append('sex', this.formData.sex);
+    if (this.utilsService.checkIfMailIsValid(this.formData.email)) {
+      const formData = new FormData();
+      formData.append('username', this.formData.username);
+      formData.append('password', this.formData.password);
+      formData.append('email', this.formData.email);
+      if (this.formData.age !== null) {
+        formData.append('age', this.formData.age);
+      }
+      formData.append('sex', this.formData.sex);
+      if (this.formData.picture) {
+        formData.append('picture', this.formData.picture, this.formData.picture.name);
+      }
 
-    if (this.formData.picture) {
-      formData.append('pfp', this.formData.picture);
+
+      this.http.post('http://localhost:3000/signup', formData).subscribe({
+        next: () => this.router.navigate(['/home-page']),
+        error: (e) => {
+          this.isLoading = false;
+          if (e.status === 403)
+            alert("user with this mail already exists!");
+          else
+            alert("An error occured!, Please try again later.");
+        },
+        complete: () => (this.isLoading = false),
+      });
+    } else {
+      alert("Please enter a valid email");
+      this.isLoading = false;
     }
 
-    this.http.post('http://localhost:3000/signup', formData).subscribe({
-      next: () => this.router.navigate(['/home']),
-      error: (e) => {
-        this.isLoading = false;
-        if (e.status === 403)
-              alert("user with this mail already exists!");
-        else
-            alert("An error occured!, Please try again later.");
-      },
-      complete: () => (this.isLoading = false),
-    });
   }
+
+  protected readonly document = document;
 }
