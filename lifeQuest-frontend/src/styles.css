@@ -1,7 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
-html{
-    padding: 0;
+body {
+  margin: 0;
 }
-body{
-    margin: 0;
+
+:root[data-theme="male"] {
+  --primary-color: #0359A3;
+  --secondary-color: #9458C0;
+  --background-color: #06101F;
+  --transition-color: #5F8ACF;
+  --text-color: black;
+  --border-color: blue;
 }
+
+:root[data-theme="female"] {
+  --primary-color: #A30350;
+  --secondary-color: #C05885;
+  --background-color: #1F0607;
+  --transition-color: #D070A3;
+  --text-color: black;
+  --border-color: red;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -27,7 +27,6 @@ CREATE TABLE QUEST (
                        day DATE NOT NULL
 );
 
--- Status Table
 CREATE TABLE STATUS (
                         statusId INTEGER PRIMARY KEY AUTOINCREMENT,
                         statusTitle TEXT NOT NULL UNIQUE

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +11,20 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
+  isLoggedIn: boolean = false;
+
+  constructor(private authService: AuthService, private router: Router) {
+  }
+    
+  ngOnInit(): void {
+      this.authService.isLoggedIn$.subscribe(loggedIn => this.isLoggedIn = loggedIn);
+  }
+
+  logout(): void {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+  }
 
     protected readonly window = window;
 }

@@ -1,1 +1,94 @@
-<p>settings works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+</head>
+<body>
+<app-nav-bar></app-nav-bar>
+<div class="container">
+  <div class="settings-grid">
+    <div class="settings-column">
+      <div>
+        <img class="general-settings" src="/images/settings-icon.png" alt="">
+        <div class="panel-header-title"><h3>General:</h3></div>
+        <div class="settings-panel general">
+          <div class="panel-content">
+            <div class="settings-row">
+              <span>Theme:</span>
+              <div>
+                <button class="theme-toggle">☀️</button>
+                <button class="theme-toggle">🌙</button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <span>Language:</span>
+              <div class="dropdown">English</div>
+            </div>
+            <div class="settings-row">
+              <span>Enable Notifications:</span>
+              <label class="toggle-switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img src="/images/lock-icon.png" alt="">
+      <div>
+        <div class="panel-header-title"><h3>Security:</h3>
+        </div>
+        <div class="settings-panel security">
+          <div class="panel-content">
+            <h4>Change Password</h4>
+            <form>
+              <input type="password" placeholder="old password..." name="oldPassword">
+              <input type="password" placeholder="new password..." name="newPassword">
+              <div class="settings-row">
+                <button type="button" class="btn btn-secondary">confirm password...</button>
+                <button type="submit" class="btn btn-primary">change password</button>
+              </div>
+            </form>
+            <div class="settings-row" style="margin-top: 1.5rem;">
+              <span>Reset password:</span>
+              <button class="btn btn-primary">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img class="einstein" src="/images/profile-icon.png" alt="" srcset="">
+    <div class="settings-panel account">
+      <div class="account-header">
+        <h3>Account:</h3>
+      </div>
+      <div class="panel-content">
+        <h4>Change Username</h4>
+        <div class="form-group">
+          <input type="text" placeholder="new Username..." name="newUsername">
+          <button class="btn btn-primary">Confirm</button>
+        </div>
+        <h4>Change Email</h4>
+        <div class="form-group">
+          <input type="email" placeholder="new Email" name="newEmail">
+          <button class="btn btn-primary">Send Code</button>
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="enter code..." name="verificationCode">
+        </div>
+        <div class="settings-row">
+          <h4>Change Profile Picture:</h4>
+        </div>
+        <div class="settings-row" style="margin-top: 2rem; justify-content: flex-end;">
+          <button class="btn btn-danger">Delete Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

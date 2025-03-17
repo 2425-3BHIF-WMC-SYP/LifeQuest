@@ -1,21 +1,22 @@
-/* General styling */
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #06101F;
-    display: flex;
-    align-items: center;
-    height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var( --background-color, #06101F) !important;
+  color: var(--text-color) !important;
+  display: flex;
+  align-items: center;
+  height: 100vh;
 }
 
 
 .signup-container {
-    background-color: #0359A3;
+    background-color: var(--primary-color);
     padding: 40px;
     border-radius: 8px;
     width: 360px;
-    box-shadow: 0px 0px 3px 3px #0359A3;
+    box-shadow: 0px 0px 3px 3px var(--primary-color);
     left: 28vw;
     position: relative;
 }
@@ -65,7 +66,6 @@ input, select {
     background-size: 12px;
 }
 
-/* Profile picture upload */
 .profile-upload {
     display: flex;
     justify-content: flex-start;
@@ -79,7 +79,6 @@ input, select {
     cursor: pointer;
 }
 
-/* Login link */
 .login-link {
     text-align: right;
     margin-top: 20px;
@@ -97,7 +96,7 @@ input, select {
 }
 
 .create-account {
-    background-color: #9f64f2;
+    background-color: var(--secondary-color);
     color: white;
     border: none;
     border-radius: 4px;
@@ -106,14 +105,16 @@ input, select {
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
+    transition: ease-out 0.2s;
 }
 
 .create-account:hover {
-    background-color: #8a52d8;
+    background-color: var(--transition-color);
 }
 
 .decoration{
     position: relative;
-    height: 55vh;
     left: 15vw;
+    width: 250px;
+    height: auto;
 }
