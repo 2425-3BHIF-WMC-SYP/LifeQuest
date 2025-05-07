@@ -5,4 +5,12 @@ export interface User {
     age: number
     sex: number
     pfp:string
+    id?: number
+}
+export interface Entry{
+    date:Date
+    title:string
+    startTime:string
+    endTime:string
+    userId:number
 }

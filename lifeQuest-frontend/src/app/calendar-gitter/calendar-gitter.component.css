@@ -1,0 +1,244 @@
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(24, minmax(50px, auto));
+  gap: 1px;
+  height: 800px;
+  background-color: #5132c8;
+  border: 1px solid #5a3dbf;
+  border-radius: 10px;
+  color: white;
+  width: 75%;
+  left: 20%;
+  position: relative;
+  overflow-y:auto;
+  overflow-x: hidden;
+  /* Added box shadow for better depth perception */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.calendar-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.calendar-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-right: 1px solid #3a2a8e; /* Changed from #590f37 to a darker purple */
+  position: relative;
+}
+.calendar-day::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  height: 1200px;
+  width: 1px;
+  background-color: #3a2a8e; /* Changed from #590f37 to a darker purple */
+}
+
+
+.time-slot {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #3a2a8e; /* Changed from #590f37 to a darker purple */
+}
+
+.time-label {
+  width: 60px;
+  font-size: 12px;
+  color: white;
+  border-radius: 40px;
+}
+
+.added-item {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #7e57c2; /* Changed from blue to match the theme */
+  border-radius: 5px;
+}
+
+.editor-popup {
+  position: absolute;
+  background: #4527a0; /* Changed from #0a0a23 to a deep purple */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Enhanced shadow for better depth */
+  color: white;
+  top: 100px;
+  left: 100px;
+  width: 300px;
+  height: 200px;
+}
+#appointHeader{
+  outline: none;
+  background: none;
+  border: none;
+}
+
+.editor-field {
+  margin-top: 30px;
+}
+.editor-field label {
+  display: inline-block;
+  width: 60px;
+}
+input[type="time"],
+select {
+  background: #d1c4e9; /* Changed from pink to a light purple */
+  border: none;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin-left: 5px;
+}
+.floating-color-picker {
+  margin-top: 5px;
+  position: absolute;
+  top: 120px;
+  left: 85px;
+  z-index: 1;
+  background: #ffffff;
+  padding: 3px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.floating-color-picker input[type="color"] {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.color-preview-box {
+  margin-top: 20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Button styles */
+button {
+  margin-top: 30px;
+  margin-right: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:first-of-type {
+  background-color: #7e57c2; /* Changed from #72BAA9 to a medium-light purple */
+  color: white;
+}
+
+button:first-of-type:hover {
+  background-color: #9575cd; /* Changed from #45a049 to a lighter purple */
+}
+
+button:last-of-type {
+  background-color: #ef5350; /* Changed from #f44336 to a softer red that complements purple */
+  color: white;
+}
+
+button:last-of-type:hover {
+  background-color: #e57373; /* Changed from #d32f2f to a lighter red */
+}
+.sidebar-container {
+  height: 80%;
+  width: 18%;
+  position: absolute;
+  top: 8vh;
+  left: 1vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.sidebar-container::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  width: 330px;
+  height:330px;
+  color: white;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  border-radius: 10px;
+  background-color: #673ab7; /* Changed from #72BAA9 to a medium purple */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Added shadow for better depth */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 5px;
+}
+
+.nav button {
+  background: transparent;
+  width: 0;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.weekdays, .days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-bottom:5px;
+}
+
+.weekdays div {
+  font-weight: bold;
+}
+
+.days div {
+  padding: 7px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.days div:hover{
+  background: #7e57c2; /* Changed to match the Save button color for consistency */
+  color: #ede7f6; /* Changed to a very light purple for better contrast */
+}
+
+.empty {
+  visibility: hidden;
+}

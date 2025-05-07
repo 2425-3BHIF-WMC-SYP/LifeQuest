@@ -1,16 +1,20 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalendarEvent, CalendarModule, CalendarUtils, CalendarView, DateAdapter } from 'angular-calendar';
+import {CalendarModule, CalendarUtils, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { addDays, startOfDay } from 'date-fns';
+import {NavBarComponent} from '../nav-bar/nav-bar.component';
+import {CalendarGitterComponent} from '../calendar-gitter/calendar-gitter.component';
+import {SidebarComponent} from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   imports: [
     CommonModule,
-    CalendarModule 
+    CalendarModule,
+    NavBarComponent,
+    CalendarGitterComponent
   ],
   providers: [
     provideAnimations(),

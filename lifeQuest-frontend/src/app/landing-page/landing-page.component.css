@@ -1,7 +1,6 @@
 html {
   padding: 0;
 }
-
 body {
   background: rgb(148, 88, 192);
   background: -moz-linear-gradient(69deg, rgba(148, 88, 192, 1) 33%, rgba(2, 99, 178, 1) 63%, rgba(9, 26, 70, 1) 100%);
@@ -22,7 +21,7 @@ body {
   text-align: center;
   color: white;
   position: absolute;
-  left: 34vw;
+  left: 33vw;
   top: 40vh;
 }
 

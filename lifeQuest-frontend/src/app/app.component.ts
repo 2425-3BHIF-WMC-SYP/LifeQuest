@@ -1,12 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-
-
-
 @Component({
   selector: 'app-root',
   imports: [
@@ -14,8 +11,8 @@ import { CommonModule } from '@angular/common';
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    CommonModule
-  ],
+    CommonModule,
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

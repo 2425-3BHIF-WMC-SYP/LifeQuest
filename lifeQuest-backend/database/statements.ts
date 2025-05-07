@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import {User} from "../backend/models";
+import {Entry, User} from "../backend/models";
 import {Database, open,} from "sqlite";
 import sqlite3 from "sqlite3";
 
@@ -25,22 +25,20 @@ export class Statement {
     public async getUser(email: string, pwd: string) {
         let stmt;
         try {
-             stmt= await this.db.prepare("SELECT * FROM users WHERE email=?;");
-            await stmt.bind([{1: email}]);
-            const user = await stmt.get();
+            stmt = await this.db.prepare("SELECT * FROM users WHERE email = ?;");
+            const user: User | undefined = await stmt.get(email);
             if (!user) {
                 console.log("No user found");
                 return null;
             }
+            console.log(user);
             const isMatch = await bcrypt.compare(pwd, user.password);
-            if (!isMatch) {
-                return null;
-            }
-            return user;
+            console.log(isMatch);
+            return isMatch ? user : null;
         } catch (err) {
-            console.log(err);
+            console.error("Error in getUser:", err);
             throw err;
-        }finally {
+        } finally {
             await stmt?.finalize();
         }
 
@@ -99,68 +97,100 @@ export class Statement {
         }
 
     }
+    public async getEntries(id: number): Promise<Entry[]> {
+        let stmt;
+        try {
+            stmt= await this.db.prepare("SELECT * FROM ENTRIES WHERE userId=?")
+            await stmt.bind([{1: id}]);
+            return await stmt.all();
+        }catch (err){
+           console.log(err);
+           throw err;
+        }finally {
+            await stmt?.finalize();
+        }
+    }
 
+
+    public async insertEntry(entry: Entry): Promise<void> {
+        let stmt;
+        try {
+            stmt= await this.db.prepare(`INSERT INTO ENTRIES(date,title,duration,userId) VALUES(?,?,?,?),
+                                                      [entry.date,entry.title,entry.duration,entry.userId] `)
+            await stmt.run();
+
+        }catch (err){
+            console.log(err);
+        }finally {
+            await stmt?.finalize();
+        }
+    }
     public async closeDb() {
         await this.db.close();
     }
 
+
     //#region CreateTablesStatement
     public async createTables(): Promise<void> {
-        await this.db.run(`CREATE TABLE IF NOT EXISTS USERS (
-                                                               id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                               email TEXT NOT NULL UNIQUE,
-                                                               username TEXT NOT NULL UNIQUE,
-                                                               password TEXT NOT NULL,
-                                                               questId INTEGER,
-                                                               sex TEXT NOT NULL,
-                                                               age INTEGER NOT NULL,
-                                                               level INTEGER DEFAULT 1,
-                                                               exp INTEGER DEFAULT 0,
-                                                               rank INTEGER DEFAULT 0,
-                                                               pfp_path TEXT,
-                                                               FOREIGN KEY (questId) REFERENCES QUESTS(questId) ON DELETE CASCADE
-            )`);
-
         await this.db.run(`CREATE TABLE IF NOT EXISTS QUESTS (
-                                                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                                title TEXT NOT NULL,
-                                                                expPoints INTEGER NOT NULL,
-                                                                day DATE NOT NULL
+                                                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                 title TEXT NOT NULL,
+                                                                 expPoints INTEGER NOT NULL,
+                                                                 day DATE NOT NULL
                            )`);
+
+        await this.db.run(`CREATE TABLE IF NOT EXISTS USERS (
+                                                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                email TEXT NOT NULL UNIQUE,
+                                                                username TEXT NOT NULL UNIQUE,
+                                                                password TEXT NOT NULL,
+                                                                questId INTEGER,
+                                                                sex TEXT NOT NULL,
+                                                                age INTEGER NOT NULL,
+                                                                level INTEGER DEFAULT 1,
+                                                                exp INTEGER DEFAULT 0,
+                                                                rank INTEGER DEFAULT 0,
+                                                                pfp_path TEXT,
+                                                                FOREIGN KEY (questId) REFERENCES QUESTS(id) ON DELETE CASCADE
+            )`);
 
         await this.db.run(`CREATE TABLE IF NOT EXISTS STATUS (
                                                                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                                 statusTitle TEXT NOT NULL UNIQUE
-                           )`);
-
-        await this.db.run(`CREATE TABLE IF NOT EXISTS TODOS (
-                                                               id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                               title TEXT NOT NULL,
-                                                               deadline DATE NOT NULL,
-                                                               userId INTEGER NOT NULL,
-                                                               statusId INTEGER NOT NULL,
-                                                               FOREIGN KEY (userId) REFERENCES USERS(userId) ON DELETE CASCADE,
-                                                               FOREIGN KEY (statusId) REFERENCES STATUS(statusId) ON DELETE CASCADE
+                                                                 statusTitle TEXT NOT NULL UNIQUE,
+                                                                 questsID INTEGER NOT NULL,
+                                                                 FOREIGN KEY (questsID) REFERENCES QUESTS(id)
             )`);
 
-        await this.db.run(`CREATE TABLE IF NOT EXISTS ENTRIES (
+        await this.db.run(`CREATE TABLE IF NOT EXISTS TODOS (
                                                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                                date DATE NOT NULL,
                                                                 title TEXT NOT NULL,
-                                                                duration INTEGER NOT NULL,
-                                                                userId INTEGER NOT NULL,
-                                                                FOREIGN KEY (userId) REFERENCES USERS(userId) ON DELETE CASCADE
+                                                                deadline DATE NOT NULL,
+                                                                userId Integer NOT NULL,
+                                                                statusId INTEGER NOT NULL,
+                                                                FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE,
+                                                                FOREIGN KEY (statusId) REFERENCES STATUS(id) ON DELETE CASCADE
+        )`);
+
+        await this.db.run(`CREATE TABLE IF NOT EXISTS ENTRIES (
+                                                                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                  date DATE NOT NULL,
+                                                                  title TEXT NOT NULL,
+                                                                  startTime TEXT NOT NULL,
+                                                                  endTime TEXT NOT NULL,
+                                                                  userId INTEGER NOT NULL,
+                                                                  FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE
             )`);
 
         await this.db.run(`CREATE TABLE IF NOT EXISTS LEADERBOARDS (
-                                                                      id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                                      expGained INTEGER NOT NULL DEFAULT 0,
-                                                                      expLost INTEGER NOT NULL DEFAULT 0,
-                                                                      questsDone INTEGER NOT NULL DEFAULT 0,
-                                                                      userId INTEGER NOT NULL,
-                                                                      FOREIGN KEY (userId) REFERENCES USERS(userId) ON DELETE CASCADE
+                                                                       id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                       expGained INTEGER NOT NULL DEFAULT 0,
+                                                                       expLost INTEGER NOT NULL DEFAULT 0,
+                                                                       questsDone INTEGER NOT NULL DEFAULT 0,
+                                                                       userId Integer NOT NULL,
+                                                                       FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE
             )`);
     }
+
 
     //#endregion CreateTablesStatement
 
