@@ -10,8 +10,11 @@ export interface requiredUserInformation {
 
 export interface Entry{
   date:Date
+  entryDate?: string
   title:string
+  colour:string
   startTime:string
   endTime:string
   userId?:number
+  id?: number
 }

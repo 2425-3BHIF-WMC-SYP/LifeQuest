@@ -11,7 +11,12 @@ calendarRouter.get('/entries',isAuthenticated, async (req,res)=>{
     let db;
     try {
         db = await initDB().then(db=>new Statement(db));
-        const entries=await db.getEntries(req.body.userId);
+        let entries;
+        console.log(req.query.userId)
+        if(typeof req.query.userId === "string"){
+             entries=await db.getEntries(parseInt(req.query.userId));
+             console.log("entries",entries);
+        }
         if (entries != null) {
             res.status(StatusCodes.OK).json(entries);
         }else
@@ -25,12 +30,13 @@ calendarRouter.get('/entries',isAuthenticated, async (req,res)=>{
 calendarRouter.post("/entries",isAuthenticated, async (req,res)=>{
     let db;
     try {
-       const {date,title,startTime,endTime,userId} = req.body;
+       const {date,title,colour,startTime,endTime,userId} = req.body;
         console.log(req.body);
        db = await initDB().then(db=>new Statement(db));
        const entry:Entry={
            date,
            title,
+           color:colour,
            startTime,
            endTime,
            userId

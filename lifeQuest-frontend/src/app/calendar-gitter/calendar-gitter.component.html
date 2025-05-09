@@ -55,3 +55,30 @@
     </div>
   </div>
 </div>
+@if (shouldAddEntry){
+  <div class="add-popup" [style.background-color]="color">
+    <input [(ngModel)]="title" type="text" placeholder="Your Title here..." >
+    <hr>
+    <div class="editor-field">
+      <div class="date-picker-wrapper">
+        <label for="date-input">Date:</label>
+        <div class="date-picker-button">
+          <input [(ngModel)]="this.date" type="date" id="date-input" />
+        </div>
+      </div>
+    </div>
+    <div class="editor-field">
+      <label>Time:</label>
+      <input type="time" [(ngModel)]="this.selectedTime"> -
+      <input type="time" [(ngModel)]="this.selectedEndTime">
+    </div>
+    <div class="editor-field">
+      Color:
+      <div class="floating-color-picker">
+        <input type="color" [(ngModel)]="color" (change)="closeColorPicker()">
+      </div>
+    </div>
+    <button (click)="save()">Save</button>
+    <button (click)="closePopUp()">Cancel</button>
+  </div>
+}

@@ -6,10 +6,10 @@ import {throwError} from 'rxjs';
 import {Entry} from '../types';
 import {getUserId} from '../jwtToken';
 import {SidebarComponent} from '../sidebar/sidebar.component';
+import {SharedService} from '../shared.service';
 
-// Constants
 const API_BASE_URL = 'http://localhost:3000';
-const DEFAULT_COLOR = '#7E57C2'; // Changed from #C05885 to a purple that matches the calendar grid
+const DEFAULT_COLOR = '#7E57C2';
 const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAYS_OF_WEEK_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const DAYS_OF_WEEK_SINGLE = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -22,7 +22,6 @@ const DAYS_OF_WEEK_SINGLE = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
   imports: [FormsModule, SidebarComponent]
 })
 export class CalendarGitterComponent implements OnInit {
-  // Calendar state
   currentYear: number;
   currentMonthIndex: number;
   currentMonth: string = '';
@@ -30,18 +29,14 @@ export class CalendarGitterComponent implements OnInit {
   calendarDays = DAYS_OF_WEEK_SHORT;
   calendarDates = Array.from({length: 24}, (_, i) => `${(i + 1).toString().padStart(2, '0')}:00`);
   weekDays = DAYS_OF_WEEK_SINGLE;
-
+  shouldAddEntry:boolean = false;
   token = localStorage.getItem('token');
   userId = this.token ? getUserId(this.token) : null;
-
-  // UI state
   showEditor = false;
   showColorPicker = false;
   color: string = DEFAULT_COLOR;
   x: number = 0;
   y: number = 0;
-
-  // Entry data
   selectedTime: string | null = null;
   selectedEndTime: string = '';
   selectedDay: string | null = null;
@@ -49,16 +44,12 @@ export class CalendarGitterComponent implements OnInit {
   title: string = '';
   date: Date | null = null;
   entries: Entry[] = [];
-
-
-  /**
-   * ViewChild for the calendar grid to use with Renderer2
-   */
   @ViewChild('calendarGrid') calendarGrid!: ElementRef;
 
   constructor(
     private httpClient: HttpClient,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private sharedService: SharedService
   ) {
     const now = new Date();
     this.currentYear = now.getFullYear();
@@ -69,37 +60,23 @@ export class CalendarGitterComponent implements OnInit {
   ngOnInit(): void {
     this.getEntries();
     this.generateCalendar();
+    this.sharedService.dataSubject$.subscribe((value) => {
+      this.shouldAddEntry = value;
+    });
   }
 
-  /**
-   * Opens the appointment editor when a time slot is clicked
-   * @param time The time slot that was clicked (e.g. "09:00")
-   * @param day The day that was clicked (e.g. "Mon")
-   * @param event The mouse event
-   */
   addAppointment(time: string, day: string, event: MouseEvent): void {
-    // Position the editor popup at the click location
     this.x = event.layerX;
     this.y = event.layerY;
-
-    // Set initial values for the editor
     this.showEditor = true;
     this.selectedTime = time;
     this.selectedDay = day;
-
-    // Calculate default end time (1 hour after start time)
     const hour = parseInt(time.split(':')[0], 10);
     this.calculatedEndTime = hour + 1 > 23 ? 23 : hour + 1; // Ensure end time doesn't exceed 23:00
     this.selectedEndTime = `${this.calculatedEndTime.toString().padStart(2, '0')}:00`;
 
-    // Calculate the date based on the selected day
     this.calculateDateFromDay(day);
   }
-
-  /**
-   * Calculates a Date object from the selected day name
-   * @param dayName The name of the day (e.g. "Mon")
-   */
   private calculateDateFromDay(dayName: string): void {
     const currentDate = new Date();
     const todayDayOfWeek = currentDate.getDay();
@@ -112,51 +89,32 @@ export class CalendarGitterComponent implements OnInit {
     this.date = targetDate;
   }
 
-  /**
-   * Gets the index of a day name in the calendarDays array
-   * @param dayName The name of the day (e.g. "Mon")
-   * @returns The index of the day in the calendarDays array
-   */
   private getDayIndexFromName(dayName: string): number {
     return this.calendarDays.findIndex(day => day === dayName);
   }
 
-  /**
-   * Converts JavaScript's day index (0=Sunday) to our calendar's day index (0=Monday)
-   * @param dayIndex JavaScript's day index (0-6, where 0 is Sunday)
-   * @returns Our calendar's day index (0-6, where 0 is Monday)
-   */
   private convertToStandardDayIndex(dayIndex: number): number {
     return dayIndex === 0 ? 6 : dayIndex - 1;
   }
-
-  /**
-   * Saves the current appointment to the database
-   */
   save(): void {
-    // Validate user is logged in
     const userId = this.userId;
     if (!userId) {
       this.handleError('Authentication required', 'Please log in to save appointments');
       return;
     }
-
-    // Validate required fields
     if (!this.date || !this.selectedTime || !this.selectedEndTime) {
       this.handleError('Missing data', 'Please ensure all fields are filled out');
       return;
     }
-
-    // Create entry object
     const entry: Entry = {
       date: this.date,
-      title: this.title || 'Untitled Appointment', // Provide default title if empty
+      title: this.title || 'Untitled Appointment',
+      colour:this.color,
       startTime: this.selectedTime,
       endTime: this.selectedEndTime,
       userId: userId,
     };
-
-    // Save entry to database
+    console.log(this.color);
     this.httpClient.post<Entry>(`${API_BASE_URL}/calendar/entries`, entry)
       .pipe(
         catchError(this.handleHttpError)
@@ -171,73 +129,55 @@ export class CalendarGitterComponent implements OnInit {
       });
   }
 
-  /**
-   * Handles HTTP errors and returns a user-friendly error message
-   * @param error The HTTP error response
-   * @returns An observable with the error message
-   */
   private handleHttpError = (error: HttpErrorResponse) => {
     let errorMessage = 'An unknown error occurred';
 
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      // Server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
 
     return throwError(() => errorMessage);
   }
 
-  /**
-   * Displays an error message (currently logs to console, could be enhanced with a UI notification)
-   * @param title The error title
-   * @param message The error message
-   */
   private handleError(title: string, message: string): void {
-    // In a real application, this would show a user-friendly error message in the UI
     console.error(`${title}: ${message}`);
-    // TODO: Add a UI notification component for errors
   }
-
-  /**
-   * Adds an entry to the calendar display and updates the entries array
-   * @param entry The entry to display
-   */
   showEntry(entry: Entry): void {
-    // Add entry to the entries array
+    console.log("Processing entry:", entry);
+
     this.entries.push(entry);
 
     try {
-      // Get the day name from the entry date
-      const date = new Date(entry.date);
-      const dayName = this.getDayName(date);
+      const date = new Date(entry.entryDate || entry.date);
 
-      // Find the indices for the time slot
+      if (isNaN(date.getTime())) {
+        throw new Error(`Invalid date format: ${entry.entryDate || entry.date}`);
+      }
+
+      const dayName = this.getDayName(date);
       const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
       const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
 
-      if (timeIndex === -1 || dayIndex === -1) {
-        throw new Error(`Invalid time (${entry.startTime}) or day (${dayName})`);
+
+      if (timeIndex === -1) {
+        throw new Error(`Invalid time: ${entry.startTime}`);
+      }
+      if (dayIndex === -1) {
+        throw new Error(`Invalid day: ${dayName}`);
       }
 
-      // Calculate the slot index
       const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
+      console.log("Slot index:", slotIndex);
 
-      // Use Renderer2 to create and append the entry element
       this.renderEntryInSlot(slotIndex, entry);
     } catch (error) {
+      console.error('Error displaying entry:', error);
       this.handleError('Display error', error instanceof Error ? error.message : 'Failed to display entry');
     }
     this.close();
   }
-
-  /**
-   * Renders an entry in the specified time slot using Renderer2
-   * @param slotIndex The index of the slot in the grid
-   * @param entry The entry to render
-   */
   private renderEntryInSlot(slotIndex: number, entry: Entry): void {
     const allSlots = document.querySelectorAll('.time-slot');
 
@@ -269,19 +209,18 @@ export class CalendarGitterComponent implements OnInit {
     }
   }
 
-  /**
-   * Gets the full day name from a Date object
-   * @param date The date object
-   * @returns The full day name (e.g. "Monday")
-   */
   private getDayName(date: Date): string {
     return DAYS_OF_WEEK[date.getDay()];
   }
 
   close(): void {
     this.showEditor = false;
+    this.sharedService.updateValue(this.shouldAddEntry);
     this.title = '';
     this.color = DEFAULT_COLOR;
+  }
+  closePopUp(): void {
+    this.shouldAddEntry = false;
   }
 
   closeColorPicker(): void {
@@ -290,13 +229,19 @@ export class CalendarGitterComponent implements OnInit {
 
 
   getEntries(): void {
-    this.httpClient.get<Entry[]>(`${API_BASE_URL}/calendar/entries`)
+    if (!this.userId) {
+      return;
+    }
+    this.httpClient.get<Entry[]>(`${API_BASE_URL}/calendar/entries`, {
+      params: { userId: this.userId }
+    })
       .pipe(
         catchError(this.handleHttpError)
       )
       .subscribe({
         next: (entries: Entry[]) => {
           this.entries = entries;
+          console.log(this.entries);
           this.displayAllEntries();
         },
         error: (error: string) => {
@@ -306,20 +251,37 @@ export class CalendarGitterComponent implements OnInit {
   }
 
   private displayAllEntries(): void {
+    console.log("Displaying entries:", this.entries);
     this.entries.forEach(entry => {
       try {
-        const date = new Date(entry.date);
+        const date = new Date(entry.entryDate || entry.date);
+
+        if (isNaN(date.getTime())) {
+          console.error(`Invalid date format for entry:`, entry);
+          return;
+        }
+
         const dayName = this.getDayName(date);
+        console.log("Processing entry:", entry.title, "Day:", dayName);
+
         const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
         const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
 
-        if (timeIndex !== -1 && dayIndex !== -1) {
-          const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
-          this.renderEntryInSlot(slotIndex, entry);
+        console.log("Time index:", timeIndex, "Day index:", dayIndex);
+
+        if (timeIndex === -1) {
+          console.error(`Invalid time for entry ${entry.title}:`, entry.startTime);
+          return;
         }
+        if (dayIndex === -1) {
+          console.error(`Invalid day for entry ${entry.title}:`, dayName);
+          return;
+        }
+
+        const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
+        this.renderEntryInSlot(slotIndex, entry);
       } catch (error) {
-        // Log error but continue with other entries
-        console.warn(`Error displaying entry: ${entry.title}`, error);
+        console.error(`Error displaying entry: ${entry.title}`, error);
       }
     });
   }
@@ -371,12 +333,6 @@ export class CalendarGitterComponent implements OnInit {
     this.currentMonth = date.toLocaleString('default', {month: 'long'});
   }
 
-  /**
-   * Gets the number of days in a specific month
-   * @param year The year
-   * @param month The month index (0-11)
-   * @returns The number of days in the month
-   */
   private getDaysInMonth(year: number, month: number): number {
     return new Date(year, month + 1, 0).getDate();
   }

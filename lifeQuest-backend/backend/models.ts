@@ -10,6 +10,7 @@ export interface User {
 export interface Entry{
     date:Date
     title:string
+    color:string
     startTime:string
     endTime:string
     userId:number

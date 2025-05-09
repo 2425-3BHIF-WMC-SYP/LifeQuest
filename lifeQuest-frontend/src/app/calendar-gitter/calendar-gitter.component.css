@@ -151,21 +151,21 @@ button:active {
 }
 
 button:first-of-type {
-  background-color: #7e57c2; /* Changed from #72BAA9 to a medium-light purple */
+  background-color: #7e57c2;
   color: white;
 }
 
 button:first-of-type:hover {
-  background-color: #9575cd; /* Changed from #45a049 to a lighter purple */
+  background-color: #9575cd;
 }
 
 button:last-of-type {
-  background-color: #ef5350; /* Changed from #f44336 to a softer red that complements purple */
+  background-color: #ef5350;
   color: white;
 }
 
 button:last-of-type:hover {
-  background-color: #e57373; /* Changed from #d32f2f to a lighter red */
+  background-color: #e57373;
 }
 .sidebar-container {
   height: 80%;
@@ -196,8 +196,164 @@ button:last-of-type:hover {
   position: absolute;
   top: 0;
   border-radius: 10px;
-  background-color: #673ab7; /* Changed from #72BAA9 to a medium purple */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Added shadow for better depth */
+  background-color: #673ab7;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.date-picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: sans-serif;
+  color: white;
+}
+
+.date-picker-button {
+  background-color: #e7a8d8;
+  border-radius: 20px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.date-picker-button input[type="date"] {
+  background: transparent;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+}
+.add-popup{
+  width: 280px;
+  position: fixed;
+  left: 15vw;
+  top: 50vh;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  color: white;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+  height: 260px;
+}
+
+.add-popup input[type="text"] {
+  width: 85%;
+  padding: 8px;
+  background:none;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.add-popup input[type="text"]:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.add-popup hr {
+  border: none;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 15px 0;
+}
+
+.add-popup .editor-field {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+.add-popup .floating-color-picker {
+  position: relative;
+  top: 0;
+  left: 10px;
+  margin-top: 0;
+}
+
+.add-popup input[type="time"] {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: white;
+  margin: 0 4px;
+  font-size: 13px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.add-popup input[type="time"]:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.add-popup button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  margin-top: 15px;
+}
+
+.add-popup button:first-of-type {
+  background: linear-gradient(135deg, #9575cd, #7e57c2);
+  color: white;
+}
+
+.add-popup button:first-of-type:hover {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.add-popup button:last-of-type {
+  background: linear-gradient(135deg, #ef5350, #e53935);
+  color: white;
+}
+
+.add-popup button:last-of-type:hover {
+  background: linear-gradient(135deg, #e57373, #ef5350);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.add-popup label {
+  font-weight: 500;
+  margin-right: 8px;
+  font-size: 13px;
+}
+
+.add-popup .floating-color-picker input[type="color"] {
+  width: 35px;
+  height: 35px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.add-popup .floating-color-picker input[type="color"]:hover {
+  transform: scale(1.1);
+}
+
+/* Add a subtle animation when the popup appears */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.add-popup {
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 .header {
@@ -235,8 +391,8 @@ button:last-of-type:hover {
   border-radius: 10px;
 }
 .days div:hover{
-  background: #7e57c2; /* Changed to match the Save button color for consistency */
-  color: #ede7f6; /* Changed to a very light purple for better contrast */
+  background: #7e57c2;
+  color: #ede7f6;
 }
 
 .empty {

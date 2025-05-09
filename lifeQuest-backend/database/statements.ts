@@ -101,8 +101,11 @@ export class Statement {
         let stmt;
         try {
             stmt= await this.db.prepare("SELECT * FROM ENTRIES WHERE userId=?")
-            await stmt.bind([{1: id}]);
-            return await stmt.all();
+            await stmt.bind(id);
+            console.log(id)
+            const einstein:Entry[]= await stmt.all();
+            console.log(einstein);
+            return einstein;
         }catch (err){
            console.log(err);
            throw err;
@@ -115,13 +118,14 @@ export class Statement {
     public async insertEntry(entry: Entry): Promise<void> {
         let stmt;
         try {
-            stmt= await this.db.prepare(`INSERT INTO ENTRIES(date,title,duration,userId) VALUES(?,?,?,?),
-                                                      [entry.date,entry.title,entry.duration,entry.userId] `)
-            await stmt.run();
+            console.log(entry.color)
+            stmt = await this.db.prepare(`INSERT INTO ENTRIES(entryDate, title, colour, startTime, endTime, userId) VALUES(?, ?, ?, ?, ?, ?)`);
+            await stmt.run(entry.date, entry.title, entry.color, entry.startTime, entry.endTime, entry.userId);
 
-        }catch (err){
+        } catch (err) {
             console.log(err);
-        }finally {
+            throw err;
+        } finally {
             await stmt?.finalize();
         }
     }
@@ -173,8 +177,9 @@ export class Statement {
 
         await this.db.run(`CREATE TABLE IF NOT EXISTS ENTRIES (
                                                                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                                                  date DATE NOT NULL,
+                                                                  entryDate DATE NOT NULL,
                                                                   title TEXT NOT NULL,
+                                                                  colour TEXT NOT NULL,
                                                                   startTime TEXT NOT NULL,
                                                                   endTime TEXT NOT NULL,
                                                                   userId INTEGER NOT NULL,

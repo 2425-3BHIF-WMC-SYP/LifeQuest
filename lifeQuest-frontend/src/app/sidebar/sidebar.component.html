@@ -1,6 +1,6 @@
 <div class="schedule-container">
   <h2>Today's schedule:</h2>
-  <div class="add-schedule-container">
+  <div (click)="addItem()" class="add-schedule-container">
     <mat-icon>add</mat-icon>
   </div>
   @for (item of schedule; track $index) {
@@ -24,8 +24,3 @@
     </div>
   }
 </div>
-
-
-
-
-

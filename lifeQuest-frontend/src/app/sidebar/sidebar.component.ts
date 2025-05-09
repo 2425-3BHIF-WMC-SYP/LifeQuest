@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatIcon} from '@angular/material/icon';
+import {FormsModule} from '@angular/forms';
+import {AddEntryComponent} from '../add-entry/add-entry.component';
+import {SharedService} from '../shared.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,12 +13,14 @@ import {MatIcon} from '@angular/material/icon';
     MatMenuTrigger,
     MatIcon,
     MatMenu,
-    MatMenuItem
+    MatMenuItem,
+    FormsModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
+  constructor(private sharedService: SharedService) {}
   schedule = [
     { time: '12:00', title: 'Meeting with John', date: 'March 21st' },
     { time: '15:00', title: 'Meeting with Jane', date: 'March 21st' },
@@ -23,6 +28,7 @@ export class SidebarComponent {
   ];
   selectedMenu: number | null = null;
   menuPosition = { x: 0, y: 0 };
+  addWindow = false;
 
   toggleMenu(index: number, event: MouseEvent) {
     event.stopPropagation();
@@ -34,9 +40,16 @@ export class SidebarComponent {
     }
   }
 
+  addItem():void{
+    console.log("einstein")
+     this.addWindow = true;
+    this.sharedService.updateValue(this.addWindow)
+  }
+
+
   deleteItem(index: number) {
     this.schedule.splice(index, 1);
-    this.selectedMenu = null; // Close menu after deletion
+    this.selectedMenu = null;
   }
 
   protected readonly indexedDB = indexedDB;
