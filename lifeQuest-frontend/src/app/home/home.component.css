@@ -1,12 +1,8 @@
-body{
+body {
   font-family: Arial, Helvetica, sans-serif;
-  background: rgb(5,14,27);
-  background: -moz-linear-gradient(180deg, rgba(5,14,27,1) 33%, rgba(10,27,46,1) 100%);
-  background: -webkit-linear-gradient(180deg, rgba(5,14,27,1) 33%, rgba(10,27,46,1) 100%);
-  background: linear-gradient(180deg, rgba(5,14,27,1) 33%, rgba(10,27,46,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#050e1b",endColorstr="#0a1b2e",GradientType=1);
+  background: rgb(81, 50, 200); /* Match Calendar background */
+  background: linear-gradient(180deg, rgba(81, 50, 200, 1) 33%, rgba(90, 61, 191, 1) 100%);
   height: 100vh;
-
 }
 
 .container {
@@ -14,117 +10,78 @@ body{
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
   padding: 20px;
-
   color: white;
   font-family: Arial, sans-serif;
 }
 
 .quests-container, .todos-container, .notification-container {
-  background-color: #162340;
+  background-color: #4527a0; /* Match Calendar card background */
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Match Calendar shadow */
 }
 
-.quests-container {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.quests-container h1 {
+.quests-container h1, .todos-container h1, .notification-container h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+  color: white;
 }
 
-.todos-container {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.todos-container h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.notification-container {
-  grid-column: 2;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-}
-
-.notification-container h1 {
-  font-size: 24px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-
-.notification-container img {
-  width: 30px;
-  height: 30px;
-  align-self: flex-end;
-}
-
-/* Quest items styling (you'll need to add this content to your HTML) */
-.quest-item {
+.quest-item, .todo-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+  color: #ede7f6; /* Match Calendar text color */
 }
 
-.quest-item-checkbox {
-  width: 20px;
-  height: 20px;
-  background-color: #8b66f5;
+.quest-item-checkbox, .progress-circle {
+  background-color: #7e57c2; /* Match Calendar accent color */
   border-radius: 5px;
-}
-
-/* Todo items styling (you'll need to add this content to your HTML) */
-.todo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
 }
 
 .delete-icon {
   cursor: pointer;
-  color: #8b9cb3;
-}
-
-/* Progress bar styling (you'll need to add this to your HTML) */
-.progress-container {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
+  color: #9575cd; /* Match Calendar hover color */
 }
 
 .progress-bar {
   height: 20px;
-  background: linear-gradient(to right, #0a96e0, #162340);
+  background: linear-gradient(to right, #7e57c2, #4527a0); /* Match Calendar gradient */
   border-radius: 10px;
-  flex-grow: 1;
-  margin-right: 10px;
-}
-
-.progress-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #162340;
-  border: 3px solid #00e1c3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
 }
 
 .notification-item {
   padding: 15px 0;
-  border-top: 1px solid #2a3b5c;
-  color: #8b9cb3;
+  border-top: 1px solid #3a2a8e; /* Match Calendar border */
+  color: #ede7f6;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:first-of-type {
+  background: linear-gradient(135deg, #9575cd, #7e57c2); /* Match Calendar button */
+  color: white;
+}
+
+button:first-of-type:hover {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+}
+
+button:last-of-type {
+  background: linear-gradient(135deg, #ef5350, #e53935); /* Match Calendar delete button */
+  color: white;
+}
+
+button:last-of-type:hover {
+  background: linear-gradient(135deg, #e57373, #ef5350);
 }

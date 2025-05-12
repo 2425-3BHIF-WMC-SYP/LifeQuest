@@ -4,7 +4,7 @@ body {
 
 :root[data-theme="male"] {
   --primary-color: #0359A3;
-  --secondary-color: #9458C0;
+  --secondary-color: #000000;
   --background-color:  linear-gradient(180deg, rgb(117, 102, 198) 50%, rgb(29, 30, 159) 100%);
   --transition-color: #5F8ACF;
   --text-color: black;

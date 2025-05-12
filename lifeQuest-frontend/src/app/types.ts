@@ -18,3 +18,6 @@ export interface Entry{
   userId?:number
   id?: number
 }
+export interface Quests{
+  
+}

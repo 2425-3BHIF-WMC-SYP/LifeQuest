@@ -14,8 +14,9 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
     CommonModule,
     CalendarModule,
     NavBarComponent,
-    CalendarGitterComponent
-  ],
+    CalendarGitterComponent,
+    SidebarComponent
+],
   providers: [
     provideAnimations(),
     {

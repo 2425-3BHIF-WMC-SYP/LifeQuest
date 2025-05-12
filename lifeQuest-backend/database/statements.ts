@@ -157,6 +157,15 @@ export class Statement {
                                                                 pfp_path TEXT,
                                                                 FOREIGN KEY (questId) REFERENCES QUESTS(id) ON DELETE CASCADE
             )`);
+        await this.db.run(` CREATE TABLE IF NOT EXISTS USER_QUESTS (
+                                                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                    userId INTEGER NOT NULL,
+                                                                    questId INTEGER NOT NULL,
+                                                                    assignedDate DATE NOT NULL DEFAULT (DATE('now')),
+                                                                    completed BOOLEAN DEFAULT 0,
+                                                                    FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE,
+                                                                    FOREIGN KEY (questId) REFERENCES QUESTS(id) ON DELETE CASCADE
+            );`)
 
         await this.db.run(`CREATE TABLE IF NOT EXISTS STATUS (
                                                                  id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -5,31 +5,25 @@ import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {Entry} from '../types';
 import {getUserId} from '../jwtToken';
-import {SidebarComponent} from '../sidebar/sidebar.component';
 import {SharedService} from '../shared.service';
 
 const API_BASE_URL = 'http://localhost:3000';
 const DEFAULT_COLOR = '#7E57C2';
 const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const DAYS_OF_WEEK_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const DAYS_OF_WEEK_SINGLE = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 @Component({
   selector: 'app-calendar-gitter',
   templateUrl: './calendar-gitter.component.html',
   styleUrls: ['./calendar-gitter.component.css'],
   standalone: true,
-  imports: [FormsModule, SidebarComponent]
+  imports: [FormsModule]
 })
 export class CalendarGitterComponent implements OnInit {
-  currentYear: number;
-  currentMonthIndex: number;
-  currentMonth: string = '';
-  calendarDaysInNumber: (number | null)[] = [];
+
   calendarDays = DAYS_OF_WEEK_SHORT;
   calendarDates = Array.from({length: 24}, (_, i) => `${(i + 1).toString().padStart(2, '0')}:00`);
-  weekDays = DAYS_OF_WEEK_SINGLE;
-  shouldAddEntry:boolean = false;
+  shouldAddEntry: boolean=false;
   token = localStorage.getItem('token');
   userId = this.token ? getUserId(this.token) : null;
   showEditor = false;
@@ -41,6 +35,8 @@ export class CalendarGitterComponent implements OnInit {
   selectedEndTime: string = '';
   selectedDay: string | null = null;
   calculatedEndTime: number = 0;
+  editEntry: boolean = false;
+  currentEditingEntryId: number | null = null;
   title: string = '';
   date: Date | null = null;
   entries: Entry[] = [];
@@ -50,22 +46,18 @@ export class CalendarGitterComponent implements OnInit {
     private httpClient: HttpClient,
     private renderer: Renderer2,
     private sharedService: SharedService
-  ) {
-    const now = new Date();
-    this.currentYear = now.getFullYear();
-    this.currentMonthIndex = now.getMonth();
-    this.updateMonthDisplay();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getEntries();
-    this.generateCalendar();
     this.sharedService.dataSubject$.subscribe((value) => {
       this.shouldAddEntry = value;
     });
   }
 
   addAppointment(time: string, day: string, event: MouseEvent): void {
+    this.editEntry = false; // Reset to false for new appointments
+    this.currentEditingEntryId = null;
     this.x = event.layerX;
     this.y = event.layerY;
     this.showEditor = true;
@@ -74,9 +66,12 @@ export class CalendarGitterComponent implements OnInit {
     const hour = parseInt(time.split(':')[0], 10);
     this.calculatedEndTime = hour + 1 > 23 ? 23 : hour + 1; // Ensure end time doesn't exceed 23:00
     this.selectedEndTime = `${this.calculatedEndTime.toString().padStart(2, '0')}:00`;
+    this.title = '';
+    this.color = DEFAULT_COLOR;
 
     this.calculateDateFromDay(day);
   }
+
   private calculateDateFromDay(dayName: string): void {
     const currentDate = new Date();
     const todayDayOfWeek = currentDate.getDay();
@@ -96,6 +91,7 @@ export class CalendarGitterComponent implements OnInit {
   private convertToStandardDayIndex(dayIndex: number): number {
     return dayIndex === 0 ? 6 : dayIndex - 1;
   }
+
   save(): void {
     const userId = this.userId;
     if (!userId) {
@@ -106,48 +102,133 @@ export class CalendarGitterComponent implements OnInit {
       this.handleError('Missing data', 'Please ensure all fields are filled out');
       return;
     }
+
     const entry: Entry = {
       date: this.date,
       title: this.title || 'Untitled Appointment',
-      colour:this.color,
+      colour: this.color,
       startTime: this.selectedTime,
       endTime: this.selectedEndTime,
       userId: userId,
     };
-    console.log(this.color);
-    this.httpClient.post<Entry>(`${API_BASE_URL}/calendar/entries`, entry)
+
+    if (this.editEntry && this.currentEditingEntryId) {
+      // Update existing entry
+      this.updateEntry(this.currentEditingEntryId, entry);
+    } else {
+      this.httpClient.post<Entry>(`${API_BASE_URL}/calendar/entries`, entry)
+        .pipe(
+          catchError(this.handleHttpError)
+        )
+        .subscribe({
+          next: (savedEntry: Entry) => {
+            this.entries.push(savedEntry);
+            this.clearCalendar();
+            this.displayAllEntries();
+            this.close();
+          },
+          error: (error: string) => {
+            this.handleError('Save failed', error);
+          }
+        });
+    }
+  }
+
+  getEntries(): void {
+    if (!this.userId) {
+      return;
+    }
+    this.httpClient.get<Entry[]>(`${API_BASE_URL}/calendar/entries`, {
+      params: { userId: this.userId }
+    })
       .pipe(
         catchError(this.handleHttpError)
       )
       .subscribe({
-        next: (savedEntry: Entry) => {
-          this.showEntry(savedEntry);
+        next: (entries: Entry[]) => {
+          this.entries = entries;
+          this.clearCalendar();
+          this.displayAllEntries();
         },
         error: (error: string) => {
-          this.handleError('Save failed', error);
+          this.handleError('Failed to load entries', error);
         }
       });
   }
 
-  private handleHttpError = (error: HttpErrorResponse) => {
-    let errorMessage = 'An unknown error occurred';
+  getSpecificEntry(entryId: number): void {
+    this.httpClient.get<Entry>(`${API_BASE_URL}/calendar/entry/${entryId}`)
+      .pipe(
+        catchError(this.handleHttpError)
+      )
+      .subscribe({
+        next: (entry: Entry) => {
+          this.prepareEntryForEditing(entry);
+        },
+        error: (error: string) => {
+          this.handleError('Failed to Fetch entry', error);
+        }
+      });
+  }
 
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  prepareEntryForEditing(entry: Entry): void {
+    this.editEntry = true;
+    this.currentEditingEntryId = entry.id!;
+    this.showEditor = true;
+    this.selectedTime = entry.startTime;
+    this.selectedEndTime = entry.endTime;
+    this.title = entry.title;
+    this.color = entry.colour || DEFAULT_COLOR;
+    this.date = new Date(entry.date);
+    
+    // Calculate position based on the entry's time and day
+    const dateObj = new Date(entry.date);
+    const dayName = DAYS_OF_WEEK[dateObj.getDay()];
+    const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
+    const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
+    
+    if (dayIndex !== -1 && timeIndex !== -1) {
+      const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
+      const allSlots = document.querySelectorAll('.time-slot');
+      if (slotIndex >= 0 && slotIndex < allSlots.length) {
+        const targetSlot = allSlots[slotIndex];
+        const rect = targetSlot.getBoundingClientRect();
+        this.x = rect.left;
+        this.y = rect.top;
+      }
     }
-
-    return throwError(() => errorMessage);
+    
   }
 
-  private handleError(title: string, message: string): void {
-    console.error(`${title}: ${message}`);
+  updateEntry(entryId: number, updatedEntry: Partial<Entry>): void {
+    this.httpClient.put<Entry>(`${API_BASE_URL}/calendar/entry/${entryId}`, updatedEntry)
+      .pipe(catchError(this.handleHttpError))
+      .subscribe({
+        next: (entry: Entry) => {
+          const index = this.entries.findIndex(e => e.id === entryId);
+          if (index !== -1) {
+            this.entries[index] = {...this.entries[index], ...updatedEntry};
+          }
+
+          this.clearCalendar();
+          this.displayAllEntries();
+          this.close();
+        },
+        error: (error: string) => {
+          this.handleError('Failed to update entry', error);
+        }
+      });
   }
+
+  clearCalendar(): void {
+    const allEntryElements = document.querySelectorAll('.calendar-entry');
+    allEntryElements.forEach(element => {
+      element.remove();
+    });
+  }
+
   showEntry(entry: Entry): void {
     console.log("Processing entry:", entry);
-
-    this.entries.push(entry);
 
     try {
       const date = new Date(entry.entryDate || entry.date);
@@ -159,7 +240,6 @@ export class CalendarGitterComponent implements OnInit {
       const dayName = this.getDayName(date);
       const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
       const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
-
 
       if (timeIndex === -1) {
         throw new Error(`Invalid time: ${entry.startTime}`);
@@ -176,8 +256,40 @@ export class CalendarGitterComponent implements OnInit {
       console.error('Error displaying entry:', error);
       this.handleError('Display error', error instanceof Error ? error.message : 'Failed to display entry');
     }
-    this.close();
   }
+
+  private displayAllEntries(): void {
+    console.log("Displaying entries:", this.entries);
+    this.entries.forEach(entry => {
+      try {
+        const date = new Date(entry.entryDate || entry.date);
+
+        if (isNaN(date.getTime())) {
+          console.error(`Invalid date format for entry:`, entry);
+          return;
+        }
+
+        const dayName = this.getDayName(date);
+        const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
+        const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
+
+        if (timeIndex === -1) {
+          console.error(`Invalid time for entry ${entry.title}:`, entry.startTime);
+          return;
+        }
+        if (dayIndex === -1) {
+          console.error(`Invalid day for entry ${entry.title}:`, dayName);
+          return;
+        }
+
+        const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
+        this.renderEntryInSlot(slotIndex, entry);
+      } catch (error) {
+        console.error(`Error displaying entry: ${entry.title}`, error);
+      }
+    });
+  }
+
   private renderEntryInSlot(slotIndex: number, entry: Entry): void {
     const allSlots = document.querySelectorAll('.time-slot');
 
@@ -192,7 +304,18 @@ export class CalendarGitterComponent implements OnInit {
       const calculatedWidth = Math.max(50, Math.min(200, title.length * 6));
       this.renderer.setAttribute(entryElement, 'title', title);
 
-      this.renderer.setStyle(entryElement, 'backgroundColor', this.color || '#e0e7ff');
+      if (entry.id) {
+        this.renderer.setAttribute(entryElement, 'data-entry-id', entry.id.toString());
+      }
+
+      this.renderer.listen(entryElement, 'click', (event) => {
+        event.stopPropagation(); // Prevent the slot click from firing
+        if (entry.id) {
+          this.prepareEntryForEditing(entry);
+        }
+      });
+
+      this.renderer.setStyle(entryElement, 'backgroundColor', entry.colour || DEFAULT_COLOR);
       this.renderer.setStyle(entryElement, 'padding', '2px 4px');
       this.renderer.setStyle(entryElement, 'borderRadius', '3px');
       this.renderer.setStyle(entryElement, 'margin', '2px 0');
@@ -215,125 +338,62 @@ export class CalendarGitterComponent implements OnInit {
 
   close(): void {
     this.showEditor = false;
-    this.sharedService.updateValue(this.shouldAddEntry);
+    this.editEntry = false;
+    this.currentEditingEntryId = null;
     this.title = '';
     this.color = DEFAULT_COLOR;
-  }
-  closePopUp(): void {
-    this.shouldAddEntry = false;
+    this.sharedService.updateValue(false);
   }
 
-  closeColorPicker(): void {
-    this.showColorPicker = false;
-  }
-
-
-  getEntries(): void {
-    if (!this.userId) {
+  delete(): void {
+    if (!this.currentEditingEntryId) {
+      this.handleError('Delete failed', 'No entry selected for deletion');
       return;
     }
-    this.httpClient.get<Entry[]>(`${API_BASE_URL}/calendar/entries`, {
-      params: { userId: this.userId }
-    })
-      .pipe(
-        catchError(this.handleHttpError)
-      )
+
+    this.httpClient.delete<void>(`${API_BASE_URL}/calendar/entries/${this.currentEditingEntryId}`)
+      .pipe(catchError(this.handleHttpError))
       .subscribe({
-        next: (entries: Entry[]) => {
-          this.entries = entries;
-          console.log(this.entries);
+        next: () => {
+          // Remove entry from local array
+          this.entries = this.entries.filter(entry => entry.id !== this.currentEditingEntryId);
+          this.clearCalendar();
           this.displayAllEntries();
+          this.close();
         },
         error: (error: string) => {
-          this.handleError('Failed to load entries', error);
+          this.handleError('Failed to delete entry', error);
         }
       });
   }
 
-  private displayAllEntries(): void {
-    console.log("Displaying entries:", this.entries);
-    this.entries.forEach(entry => {
-      try {
-        const date = new Date(entry.entryDate || entry.date);
-
-        if (isNaN(date.getTime())) {
-          console.error(`Invalid date format for entry:`, entry);
-          return;
-        }
-
-        const dayName = this.getDayName(date);
-        console.log("Processing entry:", entry.title, "Day:", dayName);
-
-        const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
-        const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
-
-        console.log("Time index:", timeIndex, "Day index:", dayIndex);
-
-        if (timeIndex === -1) {
-          console.error(`Invalid time for entry ${entry.title}:`, entry.startTime);
-          return;
-        }
-        if (dayIndex === -1) {
-          console.error(`Invalid day for entry ${entry.title}:`, dayName);
-          return;
-        }
-
-        const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
-        this.renderEntryInSlot(slotIndex, entry);
-      } catch (error) {
-        console.error(`Error displaying entry: ${entry.title}`, error);
-      }
-    });
+  closePopUp(): void {
+    this.shouldAddEntry = false;
+    this.close();
   }
 
-  generateCalendar(): void {
-    const firstDay = new Date(this.currentYear, this.currentMonthIndex, 1).getDay();
-
-    const lastDate = this.getDaysInMonth(this.currentYear, this.currentMonthIndex);
-    const prevMonthLastDate = this.getDaysInMonth(this.currentYear, this.currentMonthIndex - 1);
-
-    const emptyDays = firstDay === 0 ? 6 : firstDay - 1;
-
-    this.calendarDaysInNumber = [];
-
-    for (let i = emptyDays; i > 0; i--) {
-      this.calendarDaysInNumber.push(prevMonthLastDate - i + 1);
-    }
-
-    for (let i = 1; i <= lastDate; i++) {
-      this.calendarDaysInNumber.push(i);
-    }
-    while (this.calendarDaysInNumber.length % 7 !== 0) {
-      this.calendarDaysInNumber.push(null);
-    }
+  toggleColorPicker(): void {
+    this.showColorPicker = !this.showColorPicker;
   }
 
-  prevMonth(): void {
-    this.currentMonthIndex--;
-    if (this.currentMonthIndex < 0) {
-      this.currentMonthIndex = 11; // December
-      this.currentYear--;
+  selectColor(color: string): void {
+    this.color = color;
+    this.showColorPicker = false;
+  }
+
+  private handleHttpError = (error: HttpErrorResponse) => {
+    let errorMessage = 'An unknown error occurred';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    this.updateMonthDisplay();
-    this.generateCalendar();
+
+    return throwError(() => errorMessage);
   }
 
-  nextMonth(): void {
-    this.currentMonthIndex++;
-    if (this.currentMonthIndex > 11) {
-      this.currentMonthIndex = 0;
-      this.currentYear++;
-    }
-    this.updateMonthDisplay();
-    this.generateCalendar();
-  }
-
-  updateMonthDisplay(): void {
-    const date = new Date(this.currentYear, this.currentMonthIndex);
-    this.currentMonth = date.toLocaleString('default', {month: 'long'});
-  }
-
-  private getDaysInMonth(year: number, month: number): number {
-    return new Date(year, month + 1, 0).getDate();
+  private handleError(title: string, message: string): void {
+    console.error(`${title}: ${message}`);
   }
 }
