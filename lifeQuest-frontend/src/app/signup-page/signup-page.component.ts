@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ThemeService} from '../shared/themeService';
 import {UtilsService} from '../shared/utils.service';
@@ -12,6 +12,7 @@ import {TokenPayload} from '../jwtToken';
   standalone: true,
   imports: [
     FormsModule,
+    RouterModule
   ],
   templateUrl: './signup-page.component.html',
   styleUrls: ['./signup-page.component.css']
@@ -42,8 +43,6 @@ export class SignupPageComponent implements OnInit {
   ) {
   }
 
-
-
   protected onClick(): void {
     this.open = false;
     this.index = 1;
@@ -57,7 +56,6 @@ export class SignupPageComponent implements OnInit {
     });
   }
 
-
   toggleTheme(theme: string) {
     this.themeService.setTheme(theme);
     document.documentElement.setAttribute('data-theme', theme);
@@ -66,12 +64,15 @@ export class SignupPageComponent implements OnInit {
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.formData.picture = input.files[0];
+      const file = input.files[0];
+      const sanitizedFileName = file.name.split(/[\\/]/).pop() || file.name;
+      this.formData.picture = new File([file], sanitizedFileName, { type: file.type });
+
       const reader = new FileReader();
       reader.onload = () => {
         this.previewUrl = reader.result as string;
       }
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
     }
   }
 
@@ -110,7 +111,6 @@ export class SignupPageComponent implements OnInit {
       alert("Please enter a valid email");
       this.isLoading = false;
     }
-
   }
 
   protected readonly document = document;

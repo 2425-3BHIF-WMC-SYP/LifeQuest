@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="header">
+      <h3>{{ currentMonth }} {{ currentYear }}</h3>
+      <div class="nav">
+        <button (click)="prevMonth()">&#x276E;</button>
+        <button (click)="nextMonth()">&#x276F;</button>
+      </div>
+    </div>
+    <div class="weekdays">
+      @for (day of weekDays; track $index) {
+        <div>{{ day }}</div>
+      }
+    </div>
+    <div class="days">
+      @for (day of calendarDaysInNumber; track $index) {
+        <div>{{day}}</div>
+      }
+    </div>
+</div>

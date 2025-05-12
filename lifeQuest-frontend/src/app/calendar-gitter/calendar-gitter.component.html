@@ -17,44 +17,26 @@
       <hr>
       <div class="editor-field">
         <label>Time:</label>
-        <input type="time" [(ngModel)]="this.selectedTime"> -
+        <input type="time" [(ngModel)]="this.selectedTime"> <p style=" position: relative;left: 1%;">-</p>
         <input type="time" [(ngModel)]="this.selectedEndTime">
       </div>
       <div class="editor-field">
         Color:
         <div class="floating-color-picker">
-          <input type="color" [(ngModel)]="color" (change)="closeColorPicker()">
+          <input type="color" [(ngModel)]="color">
         </div>
       </div>
       <button (click)="save()">Save</button>
+      @if (!this.editEntry) {
       <button (click)="close()">Cancel</button>
+      }
+      @else {
+        <button>delete</button>
+      }
     </div>
   }
 </div>
 
-<div class="sidebar-container">
-  <app-sidebar>
-  </app-sidebar>
-  <div class="container">
-    <div class="header">
-      <h3>{{ currentMonth }} {{ currentYear }}</h3>
-      <div class="nav">
-        <button (click)="prevMonth()">&#x276E;</button>
-        <button (click)="nextMonth()">&#x276F;</button>
-      </div>
-    </div>
-    <div class="weekdays">
-      @for (day of weekDays; track $index) {
-        <div>{{ day }}</div>
-      }
-    </div>
-    <div class="days">
-      @for (day of calendarDaysInNumber; track $index) {
-        <div>{{day}}</div>
-      }
-    </div>
-  </div>
-</div>
 @if (shouldAddEntry){
   <div class="add-popup" [style.background-color]="color">
     <input [(ngModel)]="title" type="text" placeholder="Your Title here..." >
@@ -75,7 +57,7 @@
     <div class="editor-field">
       Color:
       <div class="floating-color-picker">
-        <input type="color" [(ngModel)]="color" (change)="closeColorPicker()">
+        <input type="color" [(ngModel)]="color">
       </div>
     </div>
     <button (click)="save()">Save</button>

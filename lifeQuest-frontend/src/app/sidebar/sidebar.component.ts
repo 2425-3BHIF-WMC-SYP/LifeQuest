@@ -3,8 +3,9 @@ import {MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatIcon} from '@angular/material/icon';
 import {FormsModule} from '@angular/forms';
-import {AddEntryComponent} from '../add-entry/add-entry.component';
+//import {AddEntryComponent} from '../add-entry/add-entry.component';
 import {SharedService} from '../shared.service';
+import { MiniCalendarComponent } from "../mini-calendar/mini-calendar.component";
 
 @Component({
   selector: 'app-sidebar',
@@ -15,7 +16,8 @@ import {SharedService} from '../shared.service';
     MatMenu,
     MatMenuItem,
     FormsModule,
-  ],
+    MiniCalendarComponent
+],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
