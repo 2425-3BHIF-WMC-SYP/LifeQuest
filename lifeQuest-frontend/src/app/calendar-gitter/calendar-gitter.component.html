@@ -27,11 +27,10 @@
         </div>
       </div>
       <button (click)="save()">Save</button>
-      @if (!this.editEntry) {
-      <button (click)="close()">Cancel</button>
-      }
-      @else {
-        <button>delete</button>
+      @if (editEntry) {
+        <button (click)="delete()">Delete</button>
+      } @else {
+        <button (click)="close()">Cancel</button>
       }
     </div>
   }

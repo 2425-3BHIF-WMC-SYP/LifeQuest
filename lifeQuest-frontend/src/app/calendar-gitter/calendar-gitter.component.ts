@@ -23,7 +23,7 @@ export class CalendarGitterComponent implements OnInit {
 
   calendarDays = DAYS_OF_WEEK_SHORT;
   calendarDates = Array.from({length: 24}, (_, i) => `${(i + 1).toString().padStart(2, '0')}:00`);
-  shouldAddEntry: boolean = false;
+  shouldAddEntry: boolean=false;
   token = localStorage.getItem('token');
   userId = this.token ? getUserId(this.token) : null;
   showEditor = false;
@@ -56,7 +56,7 @@ export class CalendarGitterComponent implements OnInit {
   }
 
   addAppointment(time: string, day: string, event: MouseEvent): void {
-    this.editEntry = false;
+    this.editEntry = false; // Reset to false for new appointments
     this.currentEditingEntryId = null;
     this.x = event.layerX;
     this.y = event.layerY;
@@ -116,7 +116,6 @@ export class CalendarGitterComponent implements OnInit {
       // Update existing entry
       this.updateEntry(this.currentEditingEntryId, entry);
     } else {
-      // Create new entry
       this.httpClient.post<Entry>(`${API_BASE_URL}/calendar/entries`, entry)
         .pipe(
           catchError(this.handleHttpError)
@@ -181,11 +180,24 @@ export class CalendarGitterComponent implements OnInit {
     this.title = entry.title;
     this.color = entry.colour || DEFAULT_COLOR;
     this.date = new Date(entry.date);
-
-    // Find day of week from the date
+    
+    // Calculate position based on the entry's time and day
     const dateObj = new Date(entry.date);
     const dayName = DAYS_OF_WEEK[dateObj.getDay()];
-    this.selectedDay = dayName.slice(0, 3);
+    const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
+    const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
+    
+    if (dayIndex !== -1 && timeIndex !== -1) {
+      const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
+      const allSlots = document.querySelectorAll('.time-slot');
+      if (slotIndex >= 0 && slotIndex < allSlots.length) {
+        const targetSlot = allSlots[slotIndex];
+        const rect = targetSlot.getBoundingClientRect();
+        this.x = rect.left;
+        this.y = rect.top;
+      }
+    }
+    
   }
 
   updateEntry(entryId: number, updatedEntry: Partial<Entry>): void {
@@ -193,7 +205,6 @@ export class CalendarGitterComponent implements OnInit {
       .pipe(catchError(this.handleHttpError))
       .subscribe({
         next: (entry: Entry) => {
-          // Update the entry in the local array
           const index = this.entries.findIndex(e => e.id === entryId);
           if (index !== -1) {
             this.entries[index] = {...this.entries[index], ...updatedEntry};
@@ -297,7 +308,8 @@ export class CalendarGitterComponent implements OnInit {
         this.renderer.setAttribute(entryElement, 'data-entry-id', entry.id.toString());
       }
 
-      this.renderer.listen(entryElement, 'click', () => {
+      this.renderer.listen(entryElement, 'click', (event) => {
+        event.stopPropagation(); // Prevent the slot click from firing
         if (entry.id) {
           this.prepareEntryForEditing(entry);
         }
