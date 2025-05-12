@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Form</title>
+  <link rel="stylesheet" href="login-page.component.css">
 </head>
 <body>
 <h1 class="app-title">lifequest</h1>
-<img class="decoration" src="/images/decoration.png" alt="" srcset="">
 <div class="login-container">
   <form (ngSubmit)="login()">
     <h2 class="login-title">Log in</h2>
@@ -19,7 +19,7 @@
 
     <div class="form-group">
       <label for="password">Password:</label>
-      <input name="password" type="password" id="password">
+      <input [(ngModel)]="requiredData.password" name="password" type="password" id="password">
     </div>
 
     <div class="login-actions">

@@ -1,103 +1,108 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: rgb(6,16,31);
-    background: -moz-linear-gradient(180deg, rgba(6,16,31,1) 33%, rgba(13,35,61,1) 100%);
-    background: -webkit-linear-gradient(180deg, rgba(6,16,31,1) 33%, rgba(13,35,61,1) 100%);
-    background: linear-gradient(180deg, rgba(6,16,31,1) 33%, rgba(13,35,61,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#06101f",endColorstr="#0d233d",GradientType=1);
-    display: flex;
-    align-items: center;
-    height: 100vh;
+body{
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: -moz-linear-gradient(180deg, rgb(0, 67, 184) 33%, rgb(27, 105, 255) 100%);
+  background: -webkit-linear-gradient(180deg, rgb(0, 67, 184) 33%, rgb(0, 139, 224) 100%);
+  background:  linear-gradient(180deg, rgb(117, 102, 198) 50%, rgb(29, 30, 159) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#050e1b", endColorstr="#0a1b2e", GradientType=1);
+  color: var(--text-color) !important;
+  display: flex;
+  align-items: center;
+  height: 100vh;
 }
 
 .login-container {
-    background-color: #0e2649;
-    padding: 40px;
-    border-radius: 8px;
-    width: 320px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    position: relative;
-    left: 37.5vw;
+  padding: 40px;
+  width: 320px;
+  position: relative;
+  left: 37.5vw;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .app-title {
-    color: white;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 28px;
-    font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
 }
 
 .login-title {
-    color: white;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 22px;
-    font-weight: normal;
-    font-style: italic;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 22px;
+  font-weight: normal;
+  font-style: italic;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 label {
-    color: white;
-    font-size: 14px;
+  color: white;
+  font-size: 14px;
 }
 
 input {
-    padding: 8px 10px;
-    border-radius: 4px;
-    border: none;
-    font-size: 14px;
-    width: 180px;
-    background-color: #e8f0fe;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  width: 180px;
+  background-color: #e8f0fe;
 }
 
 .login-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
 }
 
 .login-button {
-    background-color: #7c4dff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 30px;
-    cursor: pointer;
-    font-size: 14px;
+  background-color: #7c4dff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 30px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .login-button:hover {
-    background-color: #6c3ddf;
+  background-color: #6c3ddf;
 }
 
 .forgot-password {
-    color: #a0a0a0;
-    text-decoration: none;
-    font-size: 12px;
+  color: #a0a0a0;
+  text-decoration: none;
+  font-size: 12px;
 }
 
 .forgot-password:hover {
-    text-decoration: underline;
-    color: #b8b8b8;
+  text-decoration: underline;
+  color: #b8b8b8;
 }
-h1{
-    position: absolute;
-    top: 28vh;
-    left: 45vw;
+
+h1 {
+  position: absolute;
+  top: 28vh;
+  left: 45vw;
 }
-.decoration{
+
+.decoration {
   position: absolute;
   left: 20vw;
 }

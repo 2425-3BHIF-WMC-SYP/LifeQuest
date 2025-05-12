@@ -1,16 +1,23 @@
+body {
+  font-family: Arial, sans-serif;
+  background: -moz-linear-gradient(180deg, rgb(0, 67, 184) 33%, rgb(27, 105, 255) 100%);
+  background: -webkit-linear-gradient(180deg, rgb(0, 67, 184) 33%, rgb(0, 139, 224) 100%);
+  background: linear-gradient(180deg, rgb(117, 102, 198) 50%, rgb(29, 30, 159) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#050e1b",endColorstr="#0a1b2e",GradientType=1);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
 .calendar-container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  button {
-    padding: 10px;
-    margin-right: 5px;
-    cursor: pointer;
-  }
+  margin: 0 auto;
+  width: 40%;
+  position: relative;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+

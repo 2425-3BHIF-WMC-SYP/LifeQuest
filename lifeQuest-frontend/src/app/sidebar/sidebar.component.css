@@ -1,0 +1,81 @@
+
+.add-schedule-container{
+  position: absolute;
+  background-color: #72BAA9;
+  border-radius: 50%;
+  height: 33px;
+  transition: background-color 2s ease-in-out, transform 2s ease-in-out;
+  width: 10%;
+  top: -11vh;
+  left: 12.5vw;
+  cursor: pointer;
+}
+.add-schedule-container:hover{
+  background-color: #816cd5;
+}
+
+.sidebar-container::-webkit-scrollbar {
+  display: none;
+}
+
+.schedule-container {
+  color: white;
+  top: 40vh;
+  font-size: 22px;
+  position: relative;
+  left: 0.5vw;
+  margin: 0;
+}
+
+.schedule-container h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.schedule-container > .schedule-item {
+  background-color: #72BAA9;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 5px 0;
+  width: 90%;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+.schedule-container div span {
+  margin: 5px 0;
+  box-sizing: border-box;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.schedule-item {
+  position: relative;
+}
+
+.schedule-item span:last-child {
+  font-size: 10px;
+  color: #d3d3d3;
+  display: block;
+  margin-top: 5px;
+}
+
+.schedule-item .options {
+  position: absolute;
+  rotate: 90deg;
+  top: 0;
+  color: white;
+  right: 10px;
+  cursor: pointer;
+}
+.add-schedule-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
