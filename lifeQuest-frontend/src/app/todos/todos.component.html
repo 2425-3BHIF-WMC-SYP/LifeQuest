@@ -1,1 +1,108 @@
-<p>todos works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="todos-container">
+      <div class="main-content">
+        <div class="todos-list">
+          <h2>Todos</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead> 
+            <tbody>
+              @if (todos()?.length) {
+                @for (item of todos(); track item.id) {
+                  <tr>
+                    <td>{{item.title}}</td>
+                    <td>{{ item.deadline | date:'dd.MM.yyyy' }}</td>
+                    <td><span class="status {{ item.status }}">{{ item.status }}</span></td>
+                    <td><button (click)="deleteTodo(item.id)" class="delete-btn">🗑</button></td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="4" class="no-todos">No todos found</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <button (click)="shouldAdd = true" class="add-btn">+ Add</button>
+        </div>
+
+        <div class="deadlines">
+          <h2>Deadlines</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (todos()!.length > 0) {
+                @for (item of todos(); track item.id) {
+                  <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.deadline | date:'dd.MM.yyyy' }}</td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="2" class="no-todos">No upcoming deadlines</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    @if (shouldAdd) {
+      <div class="add-popup">
+        <form (ngSubmit)="addTodo()" #todoForm="ngForm">
+          <input 
+            type="text" 
+            [(ngModel)]="title" 
+            name="title"
+            placeholder="Your Title here..."
+            required
+            #titleInput="ngModel"
+          >
+          @if (titleInput.invalid && titleInput.touched) {
+            <div class="error">Title is required</div>
+          }
+          <hr>
+          <div class="date-picker-wrapper">
+            <label for="date-input">Date:</label>
+            <div class="date-picker-button">
+              <input 
+                type="date" 
+                [(ngModel)]="date" 
+                name="date"
+                id="date-input"
+                required
+                #dateInput="ngModel"
+              />
+            </div>
+            @if (dateInput.invalid && dateInput.touched) {
+              <div class="error">Date is required</div>
+            }
+          </div>
+          <div class="button-group">
+            <button type="submit" [disabled]="todoForm.invalid">Save</button>
+            <button type="button" (click)="shouldAdd = false">Cancel</button>
+          </div>
+        </form>
+      </div>
+    }
+</body>
+</html>

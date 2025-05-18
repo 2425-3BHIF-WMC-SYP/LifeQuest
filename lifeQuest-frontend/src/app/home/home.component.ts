@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NavBarComponent} from '../nav-bar/nav-bar.component';
 import { HttpClient } from '@angular/common/http';
+const API_BASE_URL = 'http://localhost:3000';
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,9 @@ export class HomeComponent implements OnInit {
   }
 
   getQuests() {
-      this.http.get('https://api.example.com/quests')
-        .subscribe((response: any) => {
-          console.log('Quests:', response);
-        }
-        );
-      
+    this.http.get(`${API_BASE_URL}/quests`)
+      .subscribe((response: any) => {
+        console.log('Quests:', response);
+      },);
   }
-
 }

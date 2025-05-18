@@ -6,22 +6,18 @@
   <div (click)="addItem()" class="add-schedule-container">
     <mat-icon>add</mat-icon>
   </div>
-  @for (item of schedule; track $index) {
+  @for (item of todaySchedule; track $index) {
     <div class="schedule-item">
       <button class="options" mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button class="laklak" mat-menu-item (click)="editItem()">
-          <mat-icon>edit</mat-icon>
-          <span>Edit</span>
-        </button>
         <button class="laklak" mat-menu-item (click)="deleteItem($index)">
           <mat-icon>delete</mat-icon>
           <span>Delete</span>
         </button>
       </mat-menu>
-      <span>{{ item.time }}</span>
+      <span>{{ item.startTime }}</span>
       <span>{{ item.title }}</span>
       <span>{{ item.date }}</span>
     </div>

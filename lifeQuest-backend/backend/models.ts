@@ -15,3 +15,16 @@ export interface Entry{
     endTime:string
     userId:number
 }
+export interface Quest{
+    title:string
+    expPoints:string
+    day:Date
+}
+
+export interface Todo {
+    id?: number
+    title: string
+    deadline: Date
+    userId: number
+    status: string
+}

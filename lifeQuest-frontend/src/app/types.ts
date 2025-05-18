@@ -18,6 +18,10 @@ export interface Entry{
   userId?:number
   id?: number
 }
-export interface Quests{
-  
+export interface ToDo{
+   id:number
+   title:string
+   deadline:Date
+   status:string
+   userId:number
 }

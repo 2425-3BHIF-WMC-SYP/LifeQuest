@@ -50,3 +50,45 @@ calendarRouter.post("/entries",isAuthenticated, async (req,res)=>{
         await db!.closeDb();
     }
 })
+
+calendarRouter.put("/entries/:id",isAuthenticated, async (req,res)=>{
+    let db;
+    try {
+        const id = parseInt(req.params.id);
+        const {date, title, colour, startTime, endTime, userId} = req.body;
+
+        db = await initDB().then(db=>new Statement(db));
+
+        const entry: Entry = {
+            date,
+            title,
+            color: colour,
+            startTime,
+            endTime,
+            userId
+        };
+
+        await db.updateEntry(entry, id);
+        res.status(StatusCodes.OK).json({message: "Entry updated successfully"});
+    }catch(err){
+        console.log(err);
+        res.status(500).send({error: err});
+    }finally {
+        await db!.closeDb();
+    }
+})
+
+calendarRouter.delete("/entries/:id",isAuthenticated, async (req,res)=>{
+    let db;
+    try {
+        const id = parseInt(req.params.id);
+        db = await initDB().then(db=>new Statement(db));
+        await db.deleteEntry(id);
+        res.status(StatusCodes.OK).json({message: "Entry deleted successfully"});
+    }catch(err){
+        console.log(err);
+        res.status(500).send({error: err});
+    }finally {
+        await db!.closeDb();
+    }
+})
