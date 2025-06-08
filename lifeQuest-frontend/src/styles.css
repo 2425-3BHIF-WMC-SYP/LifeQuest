@@ -3,21 +3,21 @@ body {
 }
 
 :root[data-theme="male"] {
-  --primary-color: #0359A3;
-  --secondary-color: #000000;
-  --background-color:  linear-gradient(180deg, rgb(117, 102, 198) 50%, rgb(29, 30, 159) 100%);
-  --transition-color: #5F8ACF;
-  --text-color: black;
-  --border-color: blue;
+  --primary-color: #4285F4;
+  --secondary-color: #3367D6;
+  --background-color: linear-gradient(180deg, #7986CB 0%, #3F51B5 100%);
+  --transition-color: #5C6BC0;
+  --text-color: #FFFFFF;
+  --border-color: #1A237E;
 }
 
 :root[data-theme="female"] {
-  --primary-color: #A30350;
-  --secondary-color: #C05885;
-  --background-color: linear-gradient(180deg, rgba(227,76,147,1) 0%, rgba(142,23,28,1) 96%);
-  --transition-color: #D070A3;
-  --text-color: black;
-  --border-color: red;
+  --primary-color: #E91E63;
+  --secondary-color: #C2185B;
+  --background-color: linear-gradient(180deg, #F48FB1 0%, #AD1457 100%);
+  --transition-color: #D81B60;
+  --text-color: #FFFFFF;
+  --border-color: #880E4F;
 }
 
 html, body { height: 100%; }

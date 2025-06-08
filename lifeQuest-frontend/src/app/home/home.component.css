@@ -1,87 +1,209 @@
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: rgb(81, 50, 200); /* Match Calendar background */
-  background: linear-gradient(180deg, rgba(81, 50, 200, 1) 33%, rgba(90, 61, 191, 1) 100%);
-  height: 100vh;
+:host {
+  display: block;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.page-wrapper {
+  background: linear-gradient(180deg, #2e1a89 33%, #3b2378 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  color: #f0eafd;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
-  padding: 20px;
-  color: white;
-  font-family: Arial, sans-serif;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex: 1;
+  animation: fadeIn 0.5s ease-in-out;
+  grid-template-areas: "quests todos notification";
 }
 
-.quests-container, .todos-container, .notification-container {
-  background-color: #4527a0; /* Match Calendar card background */
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Match Calendar shadow */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.quests-container h1, .todos-container h1, .notification-container h1 {
-  font-size: 24px;
+/* Responsive grid layout */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "quests todos"
+      "notification notification";
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "quests"
+      "todos"
+      "notification";
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+    grid-gap: 15px;
+  }
+
+  .quests-container, .todos-container, .notification-container {
+    padding: 15px;
+  }
+
+  .quest-item, .todo-item {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .quest-item span, .todo-item span {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+/* Card Styles */
+.quests-container,
+.todos-container,
+.notification-container {
+  background-color: #1e144a;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  height: fit-content;
+}
+
+/* Headers */
+.quests-container h1,
+.todos-container h1,
+.notification-container h1 {
+  font-size: 22px;
   margin-bottom: 20px;
-  color: white;
+  color: #ffffff;
+  border-bottom: 2px solid #8e7be9;
+  padding-bottom: 10px;
 }
 
-.quest-item, .todo-item {
+/* Item Styles */
+.quest-item, .todo-item, .notification-item {
+  background-color: #30205d;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  color: #ede7f6; /* Match Calendar text color */
+  color: #e0d9fb;
+  transition: all 0.2s ease;
 }
 
-.quest-item-checkbox, .progress-circle {
-  background-color: #7e57c2; /* Match Calendar accent color */
-  border-radius: 5px;
+.quest-item:hover,
+.todo-item:hover,
+.notification-item:hover {
+  background-color: #3e2d7a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
+.quest-item span,
+.todo-item span {
+  flex-grow: 1;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+/* Meta Info */
+.quest-points {
+  background-color: #8e7be9;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+.deadLine, .todo-date {
+  color: #b7aefc;
+  font-size: 0.8em;
+  margin: 0 10px;
+}
+
+/* Checkboxes */
+.quest-item-checkbox {
+  width: 20px;
+  height: 20px;
+  background-color: #8e7be9;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quest-item-checkbox:hover {
+  background-color: #a593ff;
+}
+
+/* Delete Icon */
 .delete-icon {
   cursor: pointer;
-  color: #9575cd; /* Match Calendar hover color */
+  color: #c9b7ff;
+  font-size: 1.2em;
+  transition: color 0.2s ease;
 }
 
-.progress-bar {
-  height: 20px;
-  background: linear-gradient(to right, #7e57c2, #4527a0); /* Match Calendar gradient */
-  border-radius: 10px;
+.delete-icon:hover {
+  color: #ff5a5f;
 }
 
+/* Notification Style */
 .notification-item {
-  padding: 15px 0;
-  border-top: 1px solid #3a2a8e; /* Match Calendar border */
-  color: #ede7f6;
+  border-left: 4px solid #8e7be9;
+  position: relative;
 }
 
+.notification-container img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Buttons */
 button {
-  padding: 10px 20px;
+  padding: 10px 18px;
   font-size: 14px;
   font-weight: bold;
   border: none;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 button:first-of-type {
-  background: linear-gradient(135deg, #9575cd, #7e57c2); /* Match Calendar button */
+  background: linear-gradient(135deg, #a68eff, #8e7be9);
   color: white;
 }
 
 button:first-of-type:hover {
-  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  background: linear-gradient(135deg, #c4b3ff, #a68eff);
 }
 
 button:last-of-type {
-  background: linear-gradient(135deg, #ef5350, #e53935); /* Match Calendar delete button */
+  background: linear-gradient(135deg, #ff5a5f, #e53935);
   color: white;
 }
 
 button:last-of-type:hover {
-  background: linear-gradient(135deg, #e57373, #ef5350);
+  background: linear-gradient(135deg, #ff7a7e, #ff5a5f);
 }

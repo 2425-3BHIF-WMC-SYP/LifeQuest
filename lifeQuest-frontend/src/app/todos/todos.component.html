@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+  <app-nav-bar></app-nav-bar>
     <div class="todos-container">
       <div class="main-content">
         <div class="todos-list">
@@ -18,14 +19,26 @@
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
-            </thead> 
+            </thead>
             <tbody>
-              @if (todos()?.length) {
+            @let todosList= todos();
+              @if (todosList.length!=0) {
                 @for (item of todos(); track item.id) {
                   <tr>
                     <td>{{item.title}}</td>
                     <td>{{ item.deadline | date:'dd.MM.yyyy' }}</td>
-                    <td><span class="status {{ item.status }}">{{ item.status }}</span></td>
+                    <td><select   [(ngModel)]="item.status"
+                                  (ngModelChange)="onStatusChange(item)"
+                                  [ngClass]="{
+                                    'pending': item.status === 'Pending',
+                                    'done': item.status === 'Done',
+                                    'overdue': item.status === 'Overdue'
+                                  }"
+                     class="status-select" name="Status">
+                      <option value="Pending">Pending</option>
+                      <option value="Done">Done</option>
+                      <option value="Overdue">Overdue</option>
+                    </select> </td>
                     <td><button (click)="deleteTodo(item.id)" class="delete-btn">🗑</button></td>
                   </tr>
                 }
@@ -38,7 +51,6 @@
           </table>
           <button (click)="shouldAdd = true" class="add-btn">+ Add</button>
         </div>
-
         <div class="deadlines">
           <h2>Deadlines</h2>
           <table>
@@ -49,8 +61,8 @@
               </tr>
             </thead>
             <tbody>
-              @if (todos()!.length > 0) {
-                @for (item of todos(); track item.id) {
+              @if (deadLines.length > 0) {
+                @for (item of deadLines; track item.id) {
                   <tr>
                     <td>{{ item.title }}</td>
                     <td>{{ item.deadline | date:'dd.MM.yyyy' }}</td>
@@ -65,28 +77,42 @@
           </table>
         </div>
       </div>
+      <div class="status-container">
+        <div class="circle-status completed">
+          <div class="circle" [style.--value]="this.todos().length ? this.completedTodos.length / this.todos().length : 0"><span>{{this.completedTodos.length}}/{{this.todos().length}}</span></div>
+          <div class="label">completed</div>
+        </div>
+        <div class="circle-status pending">
+          <div class="circle" [style.--value]="this.todos().length ? this.pendingTodos.length / this.todos().length : 0"><span>{{this.pendingTodos.length}}/{{this.todos().length}}</span></div>
+          <div class="label">pending</div>
+        </div>
+        <div class="circle-status overdue">
+          <div class="circle" [style.--value]="this.todos().length ? this.overdueTodos.length / this.todos().length : 0"><span>{{this.overdueTodos.length}}/{{this.todos().length}}</span></div>
+          <div class="label">overdue</div>
+        </div>
+      </div>
     </div>
     @if (shouldAdd) {
       <div class="add-popup">
         <form (ngSubmit)="addTodo()" #todoForm="ngForm">
-          <input 
-            type="text" 
-            [(ngModel)]="title" 
+          <input
+            type="text"
+            [(ngModel)]="title"
             name="title"
             placeholder="Your Title here..."
             required
             #titleInput="ngModel"
-          >
+          />
           @if (titleInput.invalid && titleInput.touched) {
             <div class="error">Title is required</div>
           }
-          <hr>
+          <hr />
           <div class="date-picker-wrapper">
             <label for="date-input">Date:</label>
             <div class="date-picker-button">
-              <input 
-                type="date" 
-                [(ngModel)]="date" 
+              <input
+                type="date"
+                [(ngModel)]="date"
                 name="date"
                 id="date-input"
                 required
@@ -97,11 +123,13 @@
               <div class="error">Date is required</div>
             }
           </div>
+
           <div class="button-group">
             <button type="submit" [disabled]="todoForm.invalid">Save</button>
             <button type="button" (click)="shouldAdd = false">Cancel</button>
           </div>
         </form>
+        <hr />
       </div>
     }
 </body>

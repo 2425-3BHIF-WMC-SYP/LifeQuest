@@ -1,5 +1,5 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Arial', sans-serif;
   background: linear-gradient(180deg, #5128a0, #3a2a8e);
   color: #ffffff;
   margin: 0;
@@ -17,11 +17,46 @@ body {
 }
 
 .todos-list, .deadlines, .stats {
-  background: #3a2a8e;
+  background: #5e35b1;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   flex: 1;
+}
+
+.todos-list, .deadlines {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #7e57c2 #5e35b1;
+}
+
+.todos-list {
+  padding-bottom: 15px;
+}
+
+/* Custom scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+.todos-list::-webkit-scrollbar,
+.deadlines::-webkit-scrollbar {
+  width: 8px;
+}
+
+.todos-list::-webkit-scrollbar-track,
+.deadlines::-webkit-scrollbar-track {
+  background: #5e35b1;
+  border-radius: 10px;
+}
+
+.todos-list::-webkit-scrollbar-thumb,
+.deadlines::-webkit-scrollbar-thumb {
+  background-color: #7e57c2;
+  border-radius: 10px;
+  border: 2px solid #5e35b1;
+}
+
+.todos-list::-webkit-scrollbar-thumb:hover,
+.deadlines::-webkit-scrollbar-thumb:hover {
+  background-color: #9575cd;
 }
 
 .todos-list h2, .deadlines h2, .stats h2 {
@@ -40,14 +75,15 @@ table th, table td {
 }
 
 table th {
-  background: #4527a0;
-  color: #ffffff;
-  border-bottom: 2px solid #5e35b1;
+  background: var(--primary-color);
+  color: var(--text-color);
+  border-bottom: 2px solid var(--secondary-color);
 }
 
 table td {
-  background: #3a2a8e;
-  border-bottom: 1px solid #5e35b1;
+  background: var(--transition-color);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 .status {
@@ -95,6 +131,12 @@ table td {
   font-size: 16px;
   font-weight: bold;
   transition: background 0.3s ease;
+  position: sticky;
+  bottom: 10px;
+  display: block;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }
 
 .add-btn:hover {
@@ -200,4 +242,130 @@ table td {
   font-size: 16px;
   cursor: pointer;
   outline: none;
+}
+.status-select {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  appearance: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+.status-select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+}
+.status-select {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  appearance: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.status-select {
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+}
+
+.status-select.pending {
+  background-color: #fff6bf;
+  color: #8a6d00;
+}
+
+.status-select.done {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-select.overdue {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+.status-container {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  margin-top: 30px;
+  background-color: rgba(58, 42, 142, 0.7);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.circle-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 6px solid;
+  border-color: var(--color) transparent transparent transparent;
+  transform: rotate(calc(360deg * var(--value)));
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.circle::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #0a1a2f;
+  z-index: 1;
+}
+
+.circle span {
+  position: relative;
+  z-index: 2;
+  font-weight: bold;
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.completed {
+  --color: #42f2a1;
+}
+
+.pending {
+  --color: #d9b30f;
+}
+
+.overdue {
+  --color: #c46c6c;
 }

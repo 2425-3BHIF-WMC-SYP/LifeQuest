@@ -1,61 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-<app-nav-bar></app-nav-bar>
+<div class="page-wrapper">
+  <app-nav-bar></app-nav-bar>
+
   <div class="container">
     <div class="quests-container">
       <h1>Quests</h1>
-
+      @for (quest of quests; track $index){
       <div class="quest-item">
-        <span>Listen to a 15 broadcast</span>
-        <div class="quest-points">+10 xp</div>
-        <div class="quest-item-checkbox"></div>
+          <span>{{quest.title}}</span>
+          <div class="quest-points">{{quest.expPoints}}</div>
+          <div class="deadLine">{{quest.day}}</div>
+          <div class="quest-item-checkbox"></div>
       </div>
-
-      <div class="quest-item">
-        <span>do 25 push ups</span>
-        <div class="quest-points">+10 xp</div>
-        <div class="quest-item-checkbox"></div>
-      </div>
-
-      <div class="progress-container">
-        <div>Done:</div>
-        <div class="progress-bar">2/4</div>
-        <div class="progress-circle">50%</div>
-      </div>
+      }
     </div>
 
     <div class="todos-container">
       <h1>Todos</h1>
 
-      <div class="todo-item">
-        <span>Go shopping</span>
-        <div class="todo-date">01.09.2024</div>
-        <div class="delete-icon">🗑️</div>
-      </div>
-
-      <div class="todo-item">
-        <span>Do homework</span>
-        <div class="todo-date">08.01.2024</div>
-        <div class="delete-icon">🗑️</div>
-      </div>
-
-      <div class="todo-item">
-        <span>Feed the pet</span>
-        <div class="todo-date">01.01.2025</div>
-        <div class="delete-icon">🗑️</div>
-      </div>
-
-      <div class="todo-item">
-        <span>read a book</span>
-        <div class="todo-date">09.01.2024</div>
-        <div class="delete-icon">🗑️</div>
-      </div>
+      @for (todo of todos; track $index){
+        <div class="todo-item">
+          <span>{{todo.title}}</span>
+          <div class="todo-date">{{todo.deadline| date:'dd.MM.yyyy'}}</div>
+          <div class="delete-icon">🗑️</div>
+        </div>
+      }
     </div>
 
     <div class="notification-container">
@@ -75,7 +43,4 @@
       </div>
     </div>
   </div>
-</body>
-</html>
-
-
+</div>

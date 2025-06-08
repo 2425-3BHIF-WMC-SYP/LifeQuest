@@ -43,14 +43,21 @@
         <div class="settings-panel security">
           <div class="panel-content">
             <h4>Change Password</h4>
-            <form>
-              <input type="password" placeholder="old password..." name="oldPassword">
-              <input type="password" placeholder="new password..." name="newPassword">
+            <form (ngSubmit)="onChangePassword()">
+              <input [(ngModel)]="oldPassword" type="password" placeholder="old password..." name="oldPassword">
+              <input [(ngModel)]="newPassword" type="password" placeholder="new password..." name="newPassword">
+              <input [(ngModel)]="password" type="password" placeholder="confirm password..." name="confirmPassword">
               <div class="settings-row">
-                <button type="button" class="btn btn-secondary">confirm password...</button>
                 <button type="submit" class="btn btn-primary">change password</button>
               </div>
             </form>
+            <div *ngIf="showSuccessMessage" class="success-message">
+              <div class="success-content">
+                <span class="success-icon">✓</span>
+                <span class="success-text">Password changed successfully!</span>
+              </div>
+              <button class="close-btn" (click)="hideSuccessMessage()">×</button>
+            </div>
             <div class="settings-row" style="margin-top: 1.5rem;">
               <span>Reset password:</span>
               <button class="btn btn-primary">Reset</button>

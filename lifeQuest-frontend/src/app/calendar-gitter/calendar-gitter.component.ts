@@ -27,7 +27,6 @@ export class CalendarGitterComponent implements OnInit {
   token = localStorage.getItem('token');
   userId = this.token ? getUserId(this.token) : null;
   showEditor = false;
-  showColorPicker = false;
   color: string = DEFAULT_COLOR;
   x: number = 0;
   y: number = 0;
@@ -56,7 +55,7 @@ export class CalendarGitterComponent implements OnInit {
   }
 
   addAppointment(time: string, day: string, event: MouseEvent): void {
-    this.editEntry = false; // Reset to false for new appointments
+    this.editEntry = false;
     this.currentEditingEntryId = null;
     const targetSlot = event.target as HTMLElement;
     const calendarGrid = this.calendarGrid.nativeElement;
@@ -293,20 +292,17 @@ export class CalendarGitterComponent implements OnInit {
       if (entry.id) {
         this.renderer.setAttribute(entryElement, 'data-entry-id', entry.id.toString());
       }
-
-
     this.renderer.listen(entryElement, 'click', (event) => {
       event.stopPropagation();
       if (entry.id) {
         const rect = entryElement.getBoundingClientRect();
-        
+
         const x = rect.left + window.scrollX;
         const y = rect.bottom + window.scrollY;
-        
+
         this.prepareEntryForEditing(entry,event, x, y);
       }
     });
-
       this.renderer.setStyle(entryElement, 'backgroundColor', entry.colour || DEFAULT_COLOR);
       this.renderer.setStyle(entryElement, 'padding', '2px 4px');
       this.renderer.setStyle(entryElement, 'borderRadius', '3px');
@@ -347,7 +343,6 @@ export class CalendarGitterComponent implements OnInit {
       .pipe(catchError(this.handleHttpError))
       .subscribe({
         next: () => {
-          // Remove entry from local array
           this.entries = this.entries.filter(entry => entry.id !== this.currentEditingEntryId);
           this.clearCalendar();
           this.displayAllEntries();
@@ -366,14 +361,6 @@ export class CalendarGitterComponent implements OnInit {
     this.color = DEFAULT_COLOR;
   }
 
-  toggleColorPicker(): void {
-    this.showColorPicker = !this.showColorPicker;
-  }
-
-  selectColor(color: string): void {
-    this.color = color;
-    this.showColorPicker = false;
-  }
 
   private handleHttpError = (error: HttpErrorResponse) => {
     let errorMessage = 'An unknown error occurred';
