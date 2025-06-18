@@ -18,7 +18,7 @@ export class AuthService {
     const token = this.getToken();
     const isAuthenticated = !!token && !this.isTokenExpired(token);
     if (!isAuthenticated && token) {
-      this.logout();
+      this.logout('Your session has expired. Please log in again.');
     }
     this.isLoggedInSubject.next(isAuthenticated);
     return isAuthenticated;
@@ -37,19 +37,27 @@ export class AuthService {
       const expirationDate = new Date(decodedToken.expiresAt);
       return new Date() > expirationDate;
     } catch (err) {
-      console.log('Error checking token expiration:', err);
+      console.error('Error checking token expiration:', err);
       return true;
     }
   }
-  public logout(): void {
+  public logout(message?: string): void {
     localStorage.removeItem('token');
     this.isLoggedInSubject.next(false);
+    if (message) {
+      // Store the message in sessionStorage to display it on the login page
+      sessionStorage.setItem('authMessage', message);
+    }
     this.router.navigate(['/login-page']);
   }
   public validateTokenAndRedirect(): boolean {
     const token = this.getToken();
-    if (!token || this.isTokenExpired(token)) {
-      this.logout();
+    if (!token) {
+      this.logout('Please log in to access this page.');
+      return false;
+    }
+    if (this.isTokenExpired(token)) {
+      this.logout('Your session has expired. Please log in again.');
       return false;
     }
     return true;

@@ -88,7 +88,7 @@ export class TodosComponent implements OnInit {
       next: (newTodo) => {
         console.log('Todo added successfully:', newTodo);
         this.resetForm();
-        this.getTodos(); // This will update all status arrays
+        this.getTodos();
       },
       error: (error) => console.error('Error adding todo:', error)
     });

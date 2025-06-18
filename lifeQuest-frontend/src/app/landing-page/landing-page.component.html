@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lifequest - Personalized Life Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <app-nav-bar></app-nav-bar>
-    <div class="container">
-        <div class="slogan">
-            <h1>Personlized Tracker</h1>
-            <p>Reach new levels with the help of our Tracker,Lifequest</p>
+<div class="bg-mesh"></div>
 
-        </div>
-        <div class="buttons">
-            <button onclick="window.location.href='/login-page'" class="login-btn">Log in</button>
-            <button onclick="window.location.href='/signup-page'" class="signup-btn">Get Started</button>
-        </div>
+<div class="shape"></div>
+<div class="shape"></div>
+<div class="shape"></div>
+
+<nav>
+  <div class="nav-container">
+    <div class="logo">Lifequest</div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="demo-characters">
+    <img class="demo-girl" src="/images/demo-girl.png" alt="Demo character" />
+    <img class="demo-boy" src="/images/demo-boy.png" alt="Demo character" />
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">✨ Your Personal Growth Companion</div>
+    <h1>Transform Your Life with Lifequest</h1>
+    <p>Track your habits, achieve your goals, and unlock your potential with our intelligent personal development platform</p>
+
+    <div class="cta-buttons">
+      <a href="/signup-page" class="btn btn-primary">Start Your Journey</a>
+      <a href="/login-page" class="btn btn-secondary">Sign In</a>
     </div>
-    <img class="demo-girl" src="/images/demo-girl.png" alt="" srcset="" >
-    <img class="demo-boy" src="/images/demo-boy.png" alt="">
+
+    <div class="features-preview">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Smart Analytics</h3>
+        <p>Get insights into your progress with beautiful charts and personalized recommendations</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Goal Setting</h3>
+        <p>Set meaningful goals and break them down into achievable daily actions</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Achievement System</h3>
+        <p>Stay motivated with our gamified approach to personal development</p>
+      </div>
+    </div>
+  </div>
+</section>
 </body>
 </html>

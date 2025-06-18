@@ -1,17 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import { getUserId } from '../jwtToken';
+import {getUserId, getUsername} from '../jwtToken';
 import {HttpClient} from '@angular/common/http';
 import {NgOptimizedImage} from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import {User} from '../types';
+import { jwtDecode } from 'jwt-decode';
+
 
 @Component({
   selector: 'app-nav-bar',
+  standalone: true,
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgOptimizedImage,
   ],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
@@ -21,7 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   userId: number | null = null;
   profilePictureUrl: string = '/images/profile-icon.png'; // Default profile picture
   private authSubscription: Subscription | null = null;
-
+  userName:string|null= "";
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -31,7 +34,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.checkTokenAndUpdateUI();
-
     this.authSubscription = this.authService.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
       if (!isLoggedIn) {
@@ -48,13 +50,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
   }
 
+
   private checkTokenAndUpdateUI(): void {
     const token = this.authService.getToken();
-    console.log(token);
+    console.log('Token:', token);
     if (token && !this.authService.isTokenExpired(token)) {
       this.isLoggedIn = true;
       this.userId = getUserId(token);
-      console.log(this.userId);
+      this.userName = getUsername(token);
+      console.log('Username from token:', this.userName);
+      console.log('Decoded token:', jwtDecode(token));
       if (this.userId) {
         console.log(this.userId);
         this.profilePictureUrl = `http://localhost:3000/profile-picture/${this.userId}`;

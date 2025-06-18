@@ -8,6 +8,8 @@ import {SettingsComponent} from './settings/settings.component';
 import {StatsoverviewComponent} from './statsoverview/statsoverview.component';
 import {TodosComponent} from './todos/todos.component';
 import {authGuard} from './guards/auth.guard';
+import {NotesComponent} from './notes/notes.component';
+import {ThoughtNetworkComponent} from './thought-network/thought-network.component';
 
 export const routes: Routes = [
   {path: "", component: LandingPageComponent},
@@ -18,4 +20,6 @@ export const routes: Routes = [
   {path: "setting-page",component: SettingsComponent,canActivate:[authGuard]},
   {path: "stats-overview", component: StatsoverviewComponent,canActivate:[authGuard]},
   {path: "todos-page",component:TodosComponent,canActivate:[authGuard]},
+  {path: "thoughts",component:NotesComponent,canActivate:[authGuard]},
+  {path: "thought-network",component:ThoughtNetworkComponent,canActivate:[authGuard]},
 ];

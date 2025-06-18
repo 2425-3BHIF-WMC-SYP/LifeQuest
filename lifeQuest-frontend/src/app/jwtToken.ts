@@ -18,6 +18,14 @@ export function getUserId(token:string):number|null{
       return null
     }
 }
+export function getUsername(token:string):string|null{
+  try {
+    return jwtDecode<TokenPayload>(token).user.username
+  }catch(err){
+    console.log(err);
+    return null
+  }
+}
 
 export function isTokenExpired(token: string): boolean {
   try {

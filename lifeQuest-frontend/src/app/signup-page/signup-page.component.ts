@@ -78,6 +78,7 @@ export class SignupPageComponent implements OnInit {
     }
   }
 
+
   onSignupSubmit() {
     if (this.isLoading) return;
     this.isLoading = true;

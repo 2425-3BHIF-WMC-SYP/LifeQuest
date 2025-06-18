@@ -1,33 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
 <div class="page-wrapper">
   <app-nav-bar></app-nav-bar>
-
   <div class="container">
     <div class="quests-container">
       <h1>Quests</h1>
       @for (quest of quests; track $index){
-      <div class="quest-item">
+        <div class="quest-item">
           <span>{{quest.title}}</span>
           <div class="quest-points">{{quest.expPoints}}</div>
           <div class="deadLine">{{quest.day}}</div>
-          <div class="quest-item-checkbox"></div>
-      </div>
+          <div (click)="markQuestAsDone(quest)" class="quest-item-checkbox"></div>
+        </div>
       }
     </div>
-
     <div class="todos-container">
       <h1>Todos</h1>
-
       @for (todo of todos; track $index){
         <div class="todo-item">
           <span>{{todo.title}}</span>
           <div class="todo-date">{{todo.deadline| date:'dd.MM.yyyy'}}</div>
-          <div class="delete-icon">🗑️</div>
+          <button class="delete-icon" (click)="deleteTodo(todo.id)">🗑️</button>
         </div>
       }
     </div>
 
     <div class="notification-container">
-      <img src="../../assets/images/quest-icon.png" alt="">
       <h1>Notification Center</h1>
 
       <div class="notification-item">
@@ -44,3 +50,6 @@
     </div>
   </div>
 </div>
+</body>
+</html>
+
