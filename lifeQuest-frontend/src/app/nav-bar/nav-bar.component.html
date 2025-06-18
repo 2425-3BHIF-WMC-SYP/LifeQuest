@@ -4,25 +4,34 @@
       <!---<img class="icon home" src="/images/home-icon.png" alt="" srcset=""> -->
       <a [routerLink]="['/home-page']" routerLinkActive="active">Home</a>
     </li>
-      <li>
-        <!---<img class="icon home" src="/images/calendar-icon.png" alt="" srcset=""> -->
-        <a [routerLink]="['/calendar-page']" routerLinkActive="active">Calendar</a>
-      </li>
-      <li>
-       <!--- <img src="/images/profile-icon.png" alt="" srcset="">  -->
-        <a [routerLink]="['/profile-page']" routerLinkActive="active">Profile</a>
-      </li>
-      <li>
-        <!---<img src="/images/todos-icon.png" alt="" srcset=""> -->
-        <a [routerLink]="['/todos-page']" routerLinkActive="active">Todos</a>
-      </li>
-      <li>
-        <!--- <img src="/images/stats-icon.png" alt="" srcset=""> -->
-         <a [routerLink]="['/stats-page']" routerLinkActive="active">Stats</a>
-       </li>
-       <li>
-         <!--<img src="/images/settings-icon.png" alt="" srcset=""> -->
-         <a [routerLink]="['/settings-page']" routerLinkActive="active">Settings</a>
-       </li>
-   </ul>
- </nav>
+    <li>
+      <!---<img class="icon home" src="/images/calendar-icon.png" alt="" srcset=""> -->
+      <a [routerLink]="['/calendar-page']" routerLinkActive="active">Calendar</a>
+    </li>
+    <li>
+      <!---<img src="/images/todos-icon.png" alt="" srcset=""> -->
+      <a [routerLink]="['/todos-page']" routerLinkActive="active">Todos</a>
+    </li>
+    <li>
+      <a [routerLink]="['/thoughts']" routerLinkActive="active">Notes</a>
+    </li>
+    <li>
+      <a [routerLink]="['/thought-network']" routerLinkActive="active">Thought Network</a>
+    </li>
+    <li>
+      <!--<img src="/images/settings-icon.png" alt="" srcset=""> -->
+      <a [routerLink]="['/setting-page']" routerLinkActive="active">Settings</a>
+    </li>
+
+    <li class="user-profile">
+      <div class="user-info">
+        <div class="welcome-section">
+          <div class="welcome-text">Welcome back, {{userName}}</div>
+        </div>
+        <div class="profile-picture-container">
+          <img [src]="profilePictureUrl" alt="Profile Picture" class="profile-picture">
+        </div>
+      </div>
+    </li>
+  </ul>
+</nav>

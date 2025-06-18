@@ -18,3 +18,22 @@ export function getUserId(token:string):number|null{
       return null
     }
 }
+export function getUsername(token:string):string|null{
+  try {
+    return jwtDecode<TokenPayload>(token).user.username
+  }catch(err){
+    console.log(err);
+    return null
+  }
+}
+
+export function isTokenExpired(token: string): boolean {
+  try {
+    const decodedToken = jwtDecode<TokenPayload>(token);
+    const expirationDate = new Date(decodedToken.expiresAt);
+    return new Date() > expirationDate;
+  } catch (err) {
+    console.log('Error checking token expiration:', err);
+    return true;
+  }
+}

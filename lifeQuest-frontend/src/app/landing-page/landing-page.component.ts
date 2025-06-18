@@ -4,7 +4,6 @@ import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-landing-page',
-  imports: [NavBarComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })

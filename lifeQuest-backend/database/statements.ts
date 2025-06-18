@@ -21,6 +21,7 @@ export class Statement {
     constructor(db: Database) {
         this.db = db;
     }
+    //#region UserStatements
 
     public async getUser(email: string, pwd: string) {
         let stmt;
@@ -97,6 +98,11 @@ export class Statement {
         }
 
     }
+
+
+    //#endregion UserStatements
+
+    //#region EntriesStatements
     public async getEntries(id: number): Promise<Entry[]> {
         let stmt;
         try {
@@ -129,6 +135,89 @@ export class Statement {
             await stmt?.finalize();
         }
     }
+    public async updateEntry(entry: Entry, id: number): Promise<void> {
+        let stmt;
+        try {
+            stmt= await this.db.prepare(`UPDATE ENTRIES SET entryDate = ?, title = ?, colour = ?, startTime = ?, endTime = ?, userId = ? WHERE id = ?`);
+            await stmt.run(entry.date, entry.title, entry.color, entry.startTime, entry.endTime, entry.userId, id);
+        }catch(err) {
+            console.log(err);
+            throw err;
+        }finally {
+            await stmt?.finalize();
+        }
+    }
+    public async deleteEntry(id: number): Promise<void> {
+        let stmt;
+        try {
+            stmt= await this.db.prepare(`DELETE FROM ENTRIES WHERE id=?`);
+            await stmt.run(id);
+        }catch(err) {
+            console.log(err);
+            throw err;
+        }finally {
+            await stmt?.finalize();
+        }
+    }
+    //#endregion EntriesStatements
+
+    //#region ToDosStatements
+    public async getTodos(userId: number) {
+        let stmt;
+        try {
+            stmt = await this.db.prepare("SELECT * FROM TODOS WHERE userId=?");
+            await stmt.bind(userId);
+            const todos = await stmt.all();
+            return todos;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        } finally {
+            await stmt?.finalize();
+        }
+    }
+
+    public async getTodoById(id: number, userId: number) {
+        let stmt;
+        try {
+            stmt = await this.db.prepare("SELECT * FROM TODOS WHERE id=? AND userId=?");
+            await stmt.bind([id, userId]);
+            const todo = await stmt.get();
+            return todo;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        } finally {
+            await stmt?.finalize();
+        }
+    }
+
+    public async insertTodo(todo: { title: string, deadline: Date, userId: number, status: string }) {
+        let stmt;
+        try {
+            stmt = await this.db.prepare(`INSERT INTO TODOS(title, deadline, userId, status) VALUES(?, ?, ?, ?)`);
+            await stmt.run(todo.title, todo.deadline, todo.userId, todo.status);
+        } catch (err) {
+            console.log(err);
+            throw err;
+        } finally {
+            await stmt?.finalize();
+        }
+    }
+    public async deleteTodo(id: number) {
+        let stmt;
+        try {
+            stmt = await this.db.prepare(`DELETE FROM TODOS WHERE id=?`);
+            await stmt.run(id);
+        }catch(err) {
+            console.log(err);
+            throw err;
+        }finally {
+            await stmt?.finalize();
+        }
+    }
+    //#endregion ToDosStatements
+
     public async closeDb() {
         await this.db.close();
     }
@@ -178,11 +267,10 @@ export class Statement {
                                                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                                                 title TEXT NOT NULL,
                                                                 deadline DATE NOT NULL,
-                                                                userId Integer NOT NULL,
-                                                                statusId INTEGER NOT NULL,
-                                                                FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE,
-                                                                FOREIGN KEY (statusId) REFERENCES STATUS(id) ON DELETE CASCADE
-        )`);
+                                                                userId INTEGER NOT NULL,
+                                                                status TEXT NOT NULL,
+                                                                FOREIGN KEY (userId) REFERENCES USERS(id) ON DELETE CASCADE
+            )`);
 
         await this.db.run(`CREATE TABLE IF NOT EXISTS ENTRIES (
                                                                   id INTEGER PRIMARY KEY AUTOINCREMENT,

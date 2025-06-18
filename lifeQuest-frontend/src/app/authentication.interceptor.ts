@@ -1,31 +1,38 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { jwtDecode } from 'jwt-decode';
-import { TokenPayload } from './jwtToken';
+import { inject } from '@angular/core';
+import { AuthService } from './services/auth.service';
+import {catchError} from 'rxjs/operators';
+import {throwError} from 'rxjs';
 
 export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('token');
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+
+  console.log('Request URL:', req.url);
+  console.log('Token present:', !!token);
 
   if (token) {
-    try {
-      const decodedToken = jwtDecode<TokenPayload>(token);
-      const expirationDate = new Date(decodedToken.expiresAt);
-      const currentDate = new Date();
-      if (currentDate > expirationDate) {
-        console.log('Token has expired, removing from localStorage');
-        localStorage.removeItem('token');
-        return next(req);
-      }
-      const clonedRequest = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return next(clonedRequest);
-    } catch (error) {
-      console.log('Invalid token in interceptor, removing from localStorage', error);
-      localStorage.removeItem('token');
+    if (authService.isTokenExpired(token)) {
+      console.log('Token has expired, logging out');
+      authService.logout();
       return next(req);
     }
+    console.log('Adding token to request');
+    const clonedRequest = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return next(clonedRequest).pipe(
+      catchError(error => {
+        console.error('Request failed:', error);
+        if (error.status === 401) {
+          console.log('Unauthorized error, logging out');
+          authService.logout();
+        }
+        return throwError(() => error);
+      })
+    );
   }
   return next(req);
 };

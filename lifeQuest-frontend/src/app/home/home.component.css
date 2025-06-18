@@ -1,87 +1,380 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: rgb(81, 50, 200); /* Match Calendar background */
-  background: linear-gradient(180deg, rgba(81, 50, 200, 1) 33%, rgba(90, 61, 191, 1) 100%);
-  height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #764ba2 50%, #f093fb 100%);
+  min-height: 100vh;
+  color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background mesh */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 107, 157, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(42, 82, 152, 0.15) 0%, transparent 50%);
+  animation: meshFloat 20s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes meshFloat {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(2deg); }
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  position: relative;
+}
+
+app-nav-bar {
+  display: block;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 30px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 20px;
-  padding: 20px;
-  color: white;
-  font-family: Arial, sans-serif;
+  grid-template-columns: 1fr 1fr 350px;
+  gap: 30px;
+  grid-template-areas: "quests todos notifications";
+  height: calc(100vh - 200px);
 }
 
-.quests-container, .todos-container, .notification-container {
-  background-color: #4527a0; /* Match Calendar card background */
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Match Calendar shadow */
-}
-
-.quests-container h1, .todos-container h1, .notification-container h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: white;
-}
-
-.quest-item, .todo-item {
+/* Card Base Styles for each container */
+.quests-container,
+.todos-container,
+.notification-container {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease-out;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  color: #ede7f6; /* Match Calendar text color */
+  flex-direction: column;
+  max-height: 100%;
+  margin-top: 20px;
 }
 
-.quest-item-checkbox, .progress-circle {
-  background-color: #7e57c2; /* Match Calendar accent color */
-  border-radius: 5px;
+/* Scrollable content for quest and todo items */
+.quests-container {
+  overflow-y: auto;
+}
+
+.todos-container {
+  overflow-y: auto;
+}
+
+.notification-container {
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.quests-container::before,
+.todos-container::before,
+.notification-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b9d, #f093fb, #764ba2);
+  border-radius: 24px 24px 0 0;
+}
+
+.quests-container:hover,
+.todos-container:hover,
+.notification-container:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+/* Section Styles */
+.quests-container { grid-area: quests; }
+.todos-container { grid-area: todos; }
+.notification-container { grid-area: notifications; }
+
+/* Section Headers */
+.quests-container h1,
+.todos-container h1,
+.notification-container h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 25px;
+  flex-shrink: 0; /* Header bleibt oben fixiert */
+}
+
+/* Special styling for notification container image */
+.notification-container img {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+/* Custom Scrollbar */
+.quests-container::-webkit-scrollbar,
+.todos-container::-webkit-scrollbar,
+.notification-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quests-container::-webkit-scrollbar-track,
+.todos-container::-webkit-scrollbar-track,
+.notification-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.quests-container::-webkit-scrollbar-thumb,
+.todos-container::-webkit-scrollbar-thumb,
+.notification-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.quests-container::-webkit-scrollbar-thumb:hover,
+.todos-container::-webkit-scrollbar-thumb:hover,
+.notification-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Quest Items */
+.quest-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.quest-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.quest-item span {
+  flex: 1;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.quest-points {
+  background: linear-gradient(45deg, #ff6b9d, #f093fb);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.deadLine {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  min-width: 80px;
+}
+
+.quest-item-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.quest-item-checkbox:hover {
+  border-color: #f093fb;
+  background: rgba(240, 147, 251, 0.1);
+}
+
+.quest-item-checkbox.checked {
+  background: linear-gradient(45deg, #ff6b9d, #f093fb);
+  border-color: #f093fb;
+}
+
+.quest-item-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Todo Items */
+.todo-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.todo-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.todo-item span {
+  flex: 1;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.todo-date {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
 }
 
 .delete-icon {
+  background: rgba(255, 90, 95, 0.1);
+  border: 1px solid rgba(255, 90, 95, 0.2);
+  color: #ff5a5f;
+  border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
-  color: #9575cd; /* Match Calendar hover color */
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
 }
 
-.progress-bar {
-  height: 20px;
-  background: linear-gradient(to right, #7e57c2, #4527a0); /* Match Calendar gradient */
-  border-radius: 10px;
+.delete-icon:hover {
+  background: rgba(255, 90, 95, 0.2);
+  transform: scale(1.1);
 }
 
+/* Notification Items */
 .notification-item {
-  padding: 15px 0;
-  border-top: 1px solid #3a2a8e; /* Match Calendar border */
-  color: #ede7f6;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #f093fb;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.notification-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
 }
 
-button:first-of-type {
-  background: linear-gradient(135deg, #9575cd, #7e57c2); /* Match Calendar button */
-  color: white;
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "quests todos"
+      "notifications notifications";
+    height: auto;
+    min-height: calc(100vh - 140px);
+  }
+
+  .quests-container,
+  .todos-container {
+    max-height: 60vh;
+  }
+
+  .notification-container {
+    max-height: 40vh;
+  }
 }
 
-button:first-of-type:hover {
-  background: linear-gradient(135deg, #b39ddb, #9575cd);
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "quests"
+      "todos"
+      "notifications";
+    padding: 20px 15px;
+    gap: 20px;
+    height: auto;
+  }
+
+  .quests-container,
+  .todos-container,
+  .notification-container {
+    padding: 20px;
+    max-height: 50vh;
+  }
 }
 
-button:last-of-type {
-  background: linear-gradient(135deg, #ef5350, #e53935); /* Match Calendar delete button */
-  color: white;
-}
+@media (max-width: 480px) {
+  .quest-item, .todo-item {
+    padding: 15px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
 
-button:last-of-type:hover {
-  background: linear-gradient(135deg, #e57373, #ef5350);
+  .quest-item .quest-points {
+    align-self: flex-start;
+  }
+
+  .quests-container h1,
+  .todos-container h1,
+  .notification-container h1 {
+    font-size: 1.2rem;
+  }
+
+  .quests-container,
+  .todos-container,
+  .notification-container {
+    max-height: 40vh;
+  }
 }

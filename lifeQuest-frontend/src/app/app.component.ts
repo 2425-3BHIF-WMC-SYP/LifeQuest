@@ -4,6 +4,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
   imports: [
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     CommonModule,
+    FormsModule
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

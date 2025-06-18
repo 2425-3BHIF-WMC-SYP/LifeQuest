@@ -27,7 +27,6 @@ export class CalendarGitterComponent implements OnInit {
   token = localStorage.getItem('token');
   userId = this.token ? getUserId(this.token) : null;
   showEditor = false;
-  showColorPicker = false;
   color: string = DEFAULT_COLOR;
   x: number = 0;
   y: number = 0;
@@ -56,10 +55,16 @@ export class CalendarGitterComponent implements OnInit {
   }
 
   addAppointment(time: string, day: string, event: MouseEvent): void {
-    this.editEntry = false; // Reset to false for new appointments
+    this.editEntry = false;
     this.currentEditingEntryId = null;
-    this.x = event.layerX;
-    this.y = event.layerY;
+    const targetSlot = event.target as HTMLElement;
+    const calendarGrid = this.calendarGrid.nativeElement;
+    const gridRect = calendarGrid.getBoundingClientRect();
+    const slotRect = targetSlot.getBoundingClientRect();
+
+    this.x = slotRect.left - gridRect.left;
+    this.y = slotRect.top - gridRect.top;
+
     this.showEditor = true;
     this.selectedTime = time;
     this.selectedDay = day;
@@ -113,7 +118,6 @@ export class CalendarGitterComponent implements OnInit {
     };
 
     if (this.editEntry && this.currentEditingEntryId) {
-      // Update existing entry
       this.updateEntry(this.currentEditingEntryId, entry);
     } else {
       this.httpClient.post<Entry>(`${API_BASE_URL}/calendar/entries`, entry)
@@ -125,6 +129,7 @@ export class CalendarGitterComponent implements OnInit {
             this.entries.push(savedEntry);
             this.clearCalendar();
             this.displayAllEntries();
+            this.sharedService.notifyEntryAdded();
             this.close();
           },
           error: (error: string) => {
@@ -156,22 +161,9 @@ export class CalendarGitterComponent implements OnInit {
       });
   }
 
-  getSpecificEntry(entryId: number): void {
-    this.httpClient.get<Entry>(`${API_BASE_URL}/calendar/entry/${entryId}`)
-      .pipe(
-        catchError(this.handleHttpError)
-      )
-      .subscribe({
-        next: (entry: Entry) => {
-          this.prepareEntryForEditing(entry);
-        },
-        error: (error: string) => {
-          this.handleError('Failed to Fetch entry', error);
-        }
-      });
-  }
 
-  prepareEntryForEditing(entry: Entry): void {
+
+  prepareEntryForEditing(entry: Entry,event:MouseEvent, x: number, y: number): void {
     this.editEntry = true;
     this.currentEditingEntryId = entry.id!;
     this.showEditor = true;
@@ -180,24 +172,17 @@ export class CalendarGitterComponent implements OnInit {
     this.title = entry.title;
     this.color = entry.colour || DEFAULT_COLOR;
     this.date = new Date(entry.date);
-    
-    // Calculate position based on the entry's time and day
+
     const dateObj = new Date(entry.date);
     const dayName = DAYS_OF_WEEK[dateObj.getDay()];
-    const dayIndex = this.calendarDays.findIndex(day => day === dayName.slice(0, 3));
-    const timeIndex = this.calendarDates.findIndex(time => time === entry.startTime);
-    
-    if (dayIndex !== -1 && timeIndex !== -1) {
-      const slotIndex = (timeIndex * this.calendarDays.length) + dayIndex;
-      const allSlots = document.querySelectorAll('.time-slot');
-      if (slotIndex >= 0 && slotIndex < allSlots.length) {
-        const targetSlot = allSlots[slotIndex];
-        const rect = targetSlot.getBoundingClientRect();
-        this.x = rect.left;
-        this.y = rect.top;
-      }
-    }
-    
+    const targetSlot = event.target as HTMLElement;
+    const calendarGrid = this.calendarGrid.nativeElement;
+    const gridRect = calendarGrid.getBoundingClientRect();
+    const slotRect = targetSlot.getBoundingClientRect();
+
+    this.x = slotRect.left - gridRect.left;
+    this.y = slotRect.top - gridRect.top;
+
   }
 
   updateEntry(entryId: number, updatedEntry: Partial<Entry>): void {
@@ -307,14 +292,17 @@ export class CalendarGitterComponent implements OnInit {
       if (entry.id) {
         this.renderer.setAttribute(entryElement, 'data-entry-id', entry.id.toString());
       }
+    this.renderer.listen(entryElement, 'click', (event) => {
+      event.stopPropagation();
+      if (entry.id) {
+        const rect = entryElement.getBoundingClientRect();
 
-      this.renderer.listen(entryElement, 'click', (event) => {
-        event.stopPropagation(); // Prevent the slot click from firing
-        if (entry.id) {
-          this.prepareEntryForEditing(entry);
-        }
-      });
+        const x = rect.left + window.scrollX;
+        const y = rect.bottom + window.scrollY;
 
+        this.prepareEntryForEditing(entry,event, x, y);
+      }
+    });
       this.renderer.setStyle(entryElement, 'backgroundColor', entry.colour || DEFAULT_COLOR);
       this.renderer.setStyle(entryElement, 'padding', '2px 4px');
       this.renderer.setStyle(entryElement, 'borderRadius', '3px');
@@ -355,7 +343,6 @@ export class CalendarGitterComponent implements OnInit {
       .pipe(catchError(this.handleHttpError))
       .subscribe({
         next: () => {
-          // Remove entry from local array
           this.entries = this.entries.filter(entry => entry.id !== this.currentEditingEntryId);
           this.clearCalendar();
           this.displayAllEntries();
@@ -369,17 +356,11 @@ export class CalendarGitterComponent implements OnInit {
 
   closePopUp(): void {
     this.shouldAddEntry = false;
-    this.close();
+    this.currentEditingEntryId = null;
+    this.title = '';
+    this.color = DEFAULT_COLOR;
   }
 
-  toggleColorPicker(): void {
-    this.showColorPicker = !this.showColorPicker;
-  }
-
-  selectColor(color: string): void {
-    this.color = color;
-    this.showColorPicker = false;
-  }
 
   private handleHttpError = (error: HttpErrorResponse) => {
     let errorMessage = 'An unknown error occurred';

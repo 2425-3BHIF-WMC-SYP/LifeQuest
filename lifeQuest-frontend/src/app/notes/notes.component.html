@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<app-nav-bar></app-nav-bar>
+<div class="center-container">
+  <form #thoughtForm="ngForm" (ngSubmit)="submit()">
+    <div class="thought-form">
+      <h2>🧠 Neuer Gedanke</h2>
+
+      <label for="thoughtText" class="visually-hidden">Gedanke</label>
+      <input
+        id="thoughtText"
+        name="text"
+        [(ngModel)]="text"
+        placeholder="z. B. Technologie macht süchtig"
+        class="thought-input"
+        required
+      />
+
+      <label for="thoughtCategory" class="visually-hidden">Kategorie</label>
+      <select
+        id="thoughtCategory"
+        name="category"
+        [(ngModel)]="category"
+        class="thought-select"
+        required
+      >
+        <option value="Idee">Idee</option>
+        <option value="Konzept">Konzept</option>
+        <option value="Frage">Frage</option>
+        <option value="Theorie">Theorie</option>
+      </select>
+      <button type="submit" class="thought-button" [disabled]="!thoughtForm.valid">➕ Hinzufügen</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

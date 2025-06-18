@@ -25,7 +25,7 @@
   align-items: center;
   justify-content: center;
   padding: 5px;
-  border-right: 1px solid #3a2a8e; 
+  border-right: 1px solid #3a2a8e;
   position: relative;
 }
 .calendar-day::before {
@@ -69,9 +69,9 @@
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   color: white;
-  transform: translate(-50%, -50%);
   width: 300px;
   height: 200px;
+  z-index: 1000;
 }
 #appointHeader{
   outline: none;

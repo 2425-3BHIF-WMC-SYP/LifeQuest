@@ -15,7 +15,7 @@ import {TokenPayload} from '../jwtToken';
     RouterModule
   ],
   templateUrl: './signup-page.component.html',
-  styleUrls: ['./signup-page.component.css']
+  styleUrls: ['signup-page.component.css']
 })
 export class SignupPageComponent implements OnInit {
   currentTheme = localStorage.getItem('data-theme') || 'light';
@@ -23,7 +23,7 @@ export class SignupPageComponent implements OnInit {
     username: '',
     password: '',
     email: '',
-    sex:"",
+    sex:"male",
     age: null,
     picture: null,
   };
@@ -49,7 +49,9 @@ export class SignupPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.themeService.initializeTheme();
+    // Set initial theme based on formData.sex
+    this.toggleTheme(this.formData.sex);
+
     this.themeService.theme.subscribe(theme => {
       this.currentTheme = theme;
       document.documentElement.setAttribute('data-theme', theme);
@@ -75,6 +77,7 @@ export class SignupPageComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
+
 
   onSignupSubmit() {
     if (this.isLoading) return;
